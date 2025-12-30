@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        :root {
+            --bg-black: #000000;
+            --card-gray: #1a1a1a;
+            --accent-blue: #0d6efd;
+            --text-gray: #b0b0b0;
+        }
+
+        body { 
+            background-color: var(--bg-black); 
+            color: #ffffff;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        /* Dashboard Cards */
+        .card { 
+            background-color: var(--card-gray); 
+            border: 1px solid #333; 
+            border-radius: 16px; 
+            color: white;
+            transition: transform 0.2s;
+        }
+        
+        .stat-card {
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        .stat-value { 
+            font-size: 1.8rem; 
+            font-weight: 800; 
+            letter-spacing: -1px;
+        }
+
+        .text-muted { color: var(--text-gray) !important; }
+
+        /* Navigation */
+        .nav-pills .nav-link {
+            color: var(--text-gray);
+            border-radius: 10px;
+            margin-bottom: 5px;
+            transition: 0.3s;
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: var(--accent-blue);
+            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+        }
+
+        /* Table Dark Mode */
+        .table { color: white; border-color: #333; }
+        .table-light { background-color: #252525 !important; color: white !important; border: none; }
+        .low-stock { background-color: rgba(220, 53, 69, 0.1) !important; color: #ff6b6b; }
+
+        /* Inputs */
+        .form-control, .form-select {
+            background-color: #252525;
+            border: 1px solid #444;
+            color: white;
+        }
+        .form-control:focus {
+            background-color: #2d2d2d;
+            border-color: var(--accent-blue);
+            color: white;
+            box-shadow: none;
+        }
+
+        .list-group-item {
+            background-color: transparent;
+            border-color: #333;
+            color: white;
+        }
+
+        .btn-primary { border-radius: 10px; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div id="login-screen" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:10000; display:flex; align-items:center; justify-content:center;">
+    <div style="background:#111; padding:40px; border-radius:15px; border:1px solid #333; width:350px; text-align:center;">
+        <h3 style="color:#0d6efd; font-weight:bold; margin-bottom:20px;">DARSHAN ENTERPRISE</h3>
+        <input type="password" id="pass-input" class="form-control mb-3" placeholder="Enter PIN/Password" style="background:#222; color:white; border:1px solid #444; text-align:center;">
+        <button onclick="checkAccess()" class="btn btn-primary w-100 fw-bold">Open Dashboard</button>
+        <div id="err-msg" style="color:#ff4d4d; font-size:12px; margin-top:10px;"></div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+<div class="text-center mt-2">
+    <small id="idle-status" class="text-muted" style="font-size: 0.7rem;"></small>
+</div>
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-black sidebar vh-100 border-end border-secondary p-4 pt-5">
+<div class="d-flex align-items-center mb-5">
+<img src="https://raw.githubusercontent.com/company93in-rgb/DE/refs/heads/main/LOGO.png" 
+         alt="Logo" 
+         class="rounded-circle shadow-sm mb-2 center" 
+         style="width: 70px; height: 70px; border: 2px solid #333;">
+            <h4 class="fw-bold text-primary mb-5">&nbsp;&nbsp;&nbsp;Darshan &nbsp;&nbsp;&nbsp;Enterprise</h4></div>
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist">
+                <button class="nav-link active text-start" data-bs-toggle="pill" data-bs-target="#tab-inventory">📦 Inventory</button>
+                <button class="nav-link text-start" data-bs-toggle="pill" data-bs-target="#tab-sales">💰 Sales (Out)</button>
+                <button class="nav-link text-start" data-bs-toggle="pill" data-bs-target="#tab-purchase">🛒 Purchase (In)</button>
+            <div class="mt-4 border-top border-secondary pt-3">
+<button onclick="downloadBackup()" class="btn btn-outline-success btn-sm w-100 fw-bold mb-2">
+        📥 Download Backup (CSV)
+    </button>
+    <button onclick="masterReset()" class="btn btn-danger w-100 fw-bold">
+        🔥 Master Reset (All Data)
+    </button>
+    <small class="text-muted d-block mt-2 text-center">Deletes all products & history</small>
+</div>
+<div class="mt-auto border-top border-secondary pt-3">
+    <button onclick="handleLogout()" class="btn btn-outline-secondary btn-sm w-100 fw-bold">
+        🚪 Logout Business
+    </button>
+</div>
+</div>
+        </nav>
+
+
+        <main class="col-md-10 ms-sm-auto px-md-4 py-4">
+            
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="card p-4 stat-card shadow-sm">
+                        <div class="text-muted small text-uppercase fw-bold">Revenue</div>
+                        <div class="stat-value" id="statRevenue">₹0.00</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-4 border-start border-4 border-info">
+                        <div class="text-muted small text-uppercase fw-bold text-info">Inventory Value</div>
+                        <div class="stat-value" id="statInvValue">₹0.00</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-4 border-start border-4 border-success">
+                        <div class="text-success small text-uppercase fw-bold">Net Profit</div>
+                        <div class="stat-value text-success" id="statProfit">₹0.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="tab-inventory">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="fw-bold">Inventory Dashboard</h3>
+                        <button class="btn btn-primary px-4" data-bs-toggle="modal" data-bs-target="#productModal">+ Add Product</button>
+                    </div>
+                    <div class="card overflow-hidden">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0 align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Item Name</th>
+                                        <th>Stock Qty</th>
+                                        <th>Sale Price</th>
+                                        <th>Purch. Price</th>
+                                        <th>Margin (Total)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventoryList"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="tab-sales">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card p-4 mb-4">
+                                <h5 class="fw-bold mb-4">Process Sale</h5>
+                                <div class="mb-3">
+                                    <label class="small text-muted mb-1">Select Product</label>
+                                    <select id="saleItem" class="form-select"></select>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="small text-muted mb-1">Quantity</label>
+                                    <input type="number" id="saleQty" class="form-control" placeholder="0">
+                                </div>
+                                <button onclick="processTransaction('SALE')" class="btn btn-primary w-100 py-2">Create Invoice & Record</button>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card p-4">
+                                <h5 class="fw-bold mb-4">Recent Sales History</h5>
+                                <div id="salesHistory" class="list-group list-group-flush"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="tab-purchase">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card p-4">
+                                <h5 class="fw-bold mb-4">Add Stock (Inward)</h5>
+                                <div class="mb-3">
+                                    <label class="small text-muted mb-1">Product</label>
+                                    <select id="purchaseItem" class="form-select"></select>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="small text-muted mb-1">Quantity Added</label>
+                                    <input type="number" id="purchaseQty" class="form-control" placeholder="0">
+                                </div>
+                                <button onclick="processTransaction('PURCHASE')" class="btn btn-outline-light w-100 py-2">Update Inventory</button>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card p-4">
+                                <h5 class="fw-bold mb-4">Purchase History</h5>
+                                <div id="purchaseHistory" class="list-group list-group-flush"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<div class="modal fade" id="productModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white border-secondary">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title fw-bold">New Product Registration</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3"><input type="text" id="pName" class="form-control" placeholder="Product Name"></div>
+                <div class="row mb-3">
+                    <div class="col"><input type="number" id="pSale" class="form-control" placeholder="Sale Rate (₹)"></div>
+                    <div class="col"><input type="number" id="pPurch" class="form-control" placeholder="Purch. Rate (₹)"></div>
+                </div>
+                <input type="number" id="pStock" class="form-control" placeholder="Initial Stock">
+            </div>
+            <div class="modal-footer border-secondary">
+                <button onclick="saveProduct()" class="btn btn-primary px-5">Save to Cloud</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script type="module">
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+    // --- 1. AUTHENTICATION ---
+    const BUSINESS_PASSWORD = "DADA"; 
+    window.checkAccess = function() {
+        const input = document.getElementById('pass-input').value;
+        const errMsg = document.getElementById('err-msg');
+        const loginScreen = document.getElementById('login-screen');
+        if (input === BUSINESS_PASSWORD) {
+            loginScreen.style.setProperty('display', 'none', 'important');
+            sessionStorage.setItem('isLoggedIn', 'true');
+        } else {
+            errMsg.innerText = "❌ Incorrect Password. Access Denied.";
+            document.getElementById('pass-input').value = "";
+        }
+    };
+
+    document.getElementById('pass-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') window.checkAccess();
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+        if(sessionStorage.getItem('isLoggedIn') === 'true') {
+            document.getElementById('login-screen').style.display = 'none';
+        }
+    });
+
+    // --- 2. LOGOUT & IDLE TIMER ---
+    const IDLE_TIME_LIMIT = 300000; 
+    let idleTimer;
+
+    window.handleLogout = function() {
+        sessionStorage.removeItem('isLoggedIn');
+        location.reload();
+    };
+
+    window.resetIdleTimer = function() {
+        clearTimeout(idleTimer);
+        if (sessionStorage.getItem('isLoggedIn') === 'true') {
+            idleTimer = setTimeout(() => {
+                alert("Session expired!");
+                window.handleLogout();
+            }, IDLE_TIME_LIMIT);
+        }
+    };
+
+    window.onload = () => {
+        window.resetIdleTimer();
+        ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(evt => {
+            document.addEventListener(evt, window.resetIdleTimer, false);
+        });
+    };
+
+    // --- 3. FIREBASE CORE ---
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { 
+        getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, 
+        query, orderBy, getDocs, writeBatch, deleteDoc 
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // FIXME: ENTER YOUR REAL CONFIG HERE
+    const firebaseConfig = {
+    apiKey: "AIzaSyB9jtycRyMaTweY2zxlp115Fj_9rU0k9hU",
+    authDomain: "data-store-6137a.firebaseapp.com",
+    projectId: "data-store-6137a",
+    storageBucket: "data-store-6137a.firebasestorage.app",
+    messagingSenderId: "329665997160",
+    appId: "1:329665997160:web:09a57664fc7f0dd6a3cedd",
+    measurementId: "G-PBE7WGMDQG"
+  };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const productsCol = collection(db, "products");
+    const transactionsCol = collection(db, "transactions");
+
+    let products = [];
+    let transactions = [];
+    let currentEditingId = null;
+
+    // --- 4. DATA SYNC ---
+    onSnapshot(productsCol, (snapshot) => {
+        products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        render();
+    });
+
+    onSnapshot(query(transactionsCol, orderBy("timestamp", "desc")), (snapshot) => {
+        transactions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        render();
+    });
+
+    // --- 5. PRODUCT CRUD ---
+    window.saveProduct = async function() {
+        const name = document.getElementById('pName').value;
+        const salePrice = parseFloat(document.getElementById('pSale').value) || 0;
+        const purchPrice = parseFloat(document.getElementById('pPurch').value) || 0;
+        const stock = parseFloat(document.getElementById('pStock').value) || 0;
+
+        if(!name) return alert("Enter product name");
+
+        try {
+            if (currentEditingId) {
+                // UPDATE
+                await updateDoc(doc(db, "products", currentEditingId), { name, salePrice, purchPrice, stock });
+                alert("Updated!");
+            } else {
+                // ADD NEW
+                await addDoc(productsCol, { name, salePrice, purchPrice, stock });
+                alert("Added!");
+            }
+            
+            // Reset UI
+            currentEditingId = null;
+            document.getElementById('pName').value = '';
+            document.getElementById('pSale').value = '';
+            document.getElementById('pPurch').value = '';
+            document.getElementById('pStock').value = '';
+            document.querySelector('#productModal .modal-title').innerText = "New Product Registration";
+            bootstrap.Modal.getInstance(document.getElementById('productModal')).hide();
+        } catch (e) {
+            console.error(e);
+            alert("Error saving: " + e.message);
+        }
+    };
+
+    window.editProduct = (id) => {
+        const p = products.find(prod => prod.id === id);
+        if (!p) return;
+        currentEditingId = id;
+        document.getElementById('pName').value = p.name;
+        document.getElementById('pSale').value = p.salePrice;
+        document.getElementById('pPurch').value = p.purchPrice;
+        document.getElementById('pStock').value = p.stock;
+        document.querySelector('#productModal .modal-title').innerText = "Edit Product";
+        new bootstrap.Modal(document.getElementById('productModal')).show();
+    };
+
+    window.deleteProduct = async (id, name) => {
+        if (confirm(`Delete ${name}?`)) {
+            await deleteDoc(doc(db, "products", id));
+        }
+    };
+
+    // --- 6. TRANSACTIONS ---
+    window.processTransaction = async function(type) {
+        const id = type === 'SALE' ? document.getElementById('saleItem').value : document.getElementById('purchaseItem').value;
+        const qty = parseFloat(type === 'SALE' ? document.getElementById('saleQty').value : document.getElementById('purchaseQty').value);
+        const p = products.find(prod => prod.id === id);
+
+        if (!p || qty <= 0) return alert("Invalid selection");
+
+        if (type === 'SALE') {
+            if (p.stock < qty) return alert("Insufficient Stock!");
+            await updateDoc(doc(db, "products", id), { stock: p.stock - qty });
+            await addDoc(transactionsCol, { 
+                type, name: p.name, qty, total: qty * p.salePrice, 
+                profit: (p.salePrice - p.purchPrice) * qty, 
+                date: new Date().toLocaleString(), timestamp: Date.now() 
+            });
+            generatePDF(p, qty);
+        } else {
+            await updateDoc(doc(db, "products", id), { stock: p.stock + qty });
+            await addDoc(transactionsCol, { 
+                type, name: p.name, qty, total: qty * p.purchPrice, 
+                date: new Date().toLocaleString(), timestamp: Date.now() 
+            });
+        }
+    };
+
+    // --- 7. RENDERING & UTILS ---
+    function render() {
+        const rev = transactions.filter(t => t.type === 'SALE').reduce((a, b) => a + b.total, 0);
+        const pro = transactions.filter(t => t.type === 'SALE').reduce((a, b) => a + (b.profit || 0), 0);
+        const invValue = products.reduce((a, b) => a + (b.stock * b.purchPrice), 0);
+
+        document.getElementById('statRevenue').innerText = `₹${rev.toLocaleString()}`;
+        document.getElementById('statProfit').innerText = `₹${pro.toLocaleString()}`;
+        document.getElementById('statInvValue').innerText = `₹${invValue.toLocaleString()}`;
+
+        document.getElementById('inventoryList').innerHTML = products.map(p => `
+            <tr>
+                <td>${p.name}</td>
+                <td><span class="badge ${p.stock < 5 ? 'bg-danger':'bg-dark'}">${p.stock}</span></td>
+                <td>₹${p.salePrice}</td>
+                <td>₹${p.purchPrice}</td>
+                <td class="text-success fw-bold">₹${((p.salePrice - p.purchPrice) * p.stock).toFixed(0)}</td>
+                <td>
+                    <div class="btn-group">
+                        <button onclick="editProduct('${p.id}')" class="btn btn-sm btn-outline-info">✏️</button>
+                        <button onclick="deleteProduct('${p.id}', '${p.name}')" class="btn btn-sm btn-outline-danger">🗑️</button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+
+        const opts = products.map(p => `<option value="${p.id}">${p.name} (${p.stock})</option>`).join('');
+        document.getElementById('saleItem').innerHTML = opts;
+        document.getElementById('purchaseItem').innerHTML = opts;
+
+        document.getElementById('salesHistory').innerHTML = transactions.filter(t => t.type === 'SALE').map(t => `
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div><div class="fw-bold">${t.name} (x${t.qty})</div><small class="text-muted">${t.date}</small></div>
+                <div class="text-end"><div class="text-success fw-bold">+₹${t.total}</div><small class="text-primary">Profit: ₹${t.profit}</small></div>
+            </div>
+        `).join('');
+
+        document.getElementById('purchaseHistory').innerHTML = transactions.filter(t => t.type === 'PURCHASE').map(t => `
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div><div class="fw-bold">${t.name} (x${t.qty})</div><small class="text-muted">${t.date}</small></div>
+                <div class="text-end"><div class="text-danger fw-bold">-₹${t.total}</div></div>
+            </div>
+        `).join('');
+    }
+
+    window.downloadBackup = function() {
+        let csv = "SECTION: INVENTORY\nName,Stock,Sale,Purch,Profit\n";
+        products.forEach(p => csv += `${p.name},${p.stock},${p.salePrice},${p.purchPrice},${(p.salePrice-p.purchPrice)*p.stock}\n`);
+        csv += "\nSECTION: TRANSACTIONS\nDate,Type,Name,Qty,Total,Profit\n";
+        transactions.forEach(t => csv += `${t.date},${t.type},${t.name},${t.qty},${t.total},${t.profit||0}\n`);
+        const link = document.createElement("a");
+        link.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+        link.download = `Backup_${new Date().toLocaleDateString()}.csv`;
+        link.click();
+    };
+
+    window.masterReset = async function() {
+        if (prompt("Type Secret Key:") === "DADA") {
+            const batch = writeBatch(db);
+            const pS = await getDocs(productsCol);
+            const tS = await getDocs(transactionsCol);
+            pS.forEach(d => batch.delete(d.ref));
+            tS.forEach(d => batch.delete(d.ref));
+            await batch.commit();
+            location.reload();
+        }
+    };
+
+    window.generatePDF = function(p, qty) {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.text("DARSHAN ENTERPRISE", 105, 20, { align: "center" });
+        doc.autoTable({
+            startY: 40,
+            head: [['Item', 'Qty', 'Rate', 'Total']],
+            body: [[p.name, qty, p.salePrice, (p.salePrice * qty)]],
+        });
+        doc.save(`Invoice_${Date.now()}.pdf`);
+    };
+</script>
+
+</body>
+</html>
