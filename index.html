@@ -3,153 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Darshan Enterprise | Management Pro Max</title>
+    <title>Darshan Enterprise | Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-        :root { 
-            --bg-black: #05070a; 
-            --card-gray: #11141d; 
-            --accent-blue: #3d5afe; 
-            --accent-cyan: #00e5ff;
-            --accent-rose: #ff2d55;
-            --accent-emerald: #00c853;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-        }
+    <link href="index.css" rel="stylesheet">
 
-        body { background-color: var(--bg-black); color: var(--text-main); font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
-        
-        /* FIX: High Visibility for Inputs */
-        .form-control, .form-select { 
-            background-color: #1a1f2e !important; 
-            border: 1px solid rgba(255, 255, 255, 0.1) !important; 
-            color: #ffffff !important; /* Force Text to be White */
-            border-radius: 12px; 
-            padding: 12px;
-            font-weight: 600;
-        }
-        .form-control:focus { background-color: #242b3d !important; border-color: var(--accent-cyan) !important; box-shadow: 0 0 10px rgba(0, 229, 255, 0.2); }
-        ::placeholder { color: #94a3b8 !important; opacity: 1 !important; font-weight: 400; }
-        label { color: var(--accent-cyan) !important; font-size: 0.8rem; font-weight: 800; margin-bottom: 5px; display: block; text-transform: uppercase; }
-
-        /* Stat Cards */
-        .stat-card { border-radius: 24px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); transition: transform 0.3s ease; height: 100%; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .stat-card:hover { transform: translateY(-5px); }
-        .stat-revenue { background: linear-gradient(135deg, #1e3a8a 0%, #3d5afe 100%); }
-        .stat-stock { background: linear-gradient(135deg, #164e63 0%, #00e5ff 100%); }
-        .stat-out { background: linear-gradient(135deg, #9f1239 0%, #ff2d55 100%); }
-        .stat-profit { background: linear-gradient(135deg, #064e3b 0%, #00c853 100%); }
-        .stat-value { font-size: 1.8rem; font-weight: 800; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-
-        /* Low Stock Pulsing */
-        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(255, 45, 85, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 45, 85, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 45, 85, 0); } }
-        .badge-low-stock { background-color: var(--accent-rose) !important; animation: pulse-red 2s infinite; font-weight: 800; }
-
-        /* Navigation */
-        .sidebar { background: #0a0c14; border-right: 1px solid rgba(255, 255, 255, 0.05); min-height: 100vh; }
-        .nav-pills .nav-link { color: var(--text-muted); border-radius: 12px; margin-bottom: 8px; padding: 12px 20px; transition: all 0.3s ease; text-align: left; }
-        .nav-pills .nav-link.active { background: linear-gradient(45deg, var(--accent-blue), var(--accent-cyan)); color: white; font-weight: 700; }
-
-        @media (max-width: 768px) {
-            .sidebar { min-height: auto; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 1rem !important; }
-            .nav-pills { display: flex !important; flex-direction: row !important; overflow-x: auto; white-space: nowrap; }
-        }
-
-        /* Classy Tables */
-        .table-container { background: rgba(17, 20, 29, 0.6); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05); overflow: hidden; }
-        .table { color: var(--text-main); margin-bottom: 0; }
-        thead th { background: #0a0c14; color: var(--accent-cyan); font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; padding: 18px; border-bottom: 2px solid rgba(0, 229, 255, 0.2); cursor: pointer; }
-        tbody td { padding: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.03); vertical-align: middle; }
-        
-        .card { background: rgba(17, 20, 29, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; }
-        #login-screen { position:fixed; top:0; left:0; width:100%; height:100%; background:radial-gradient(circle at center, #1a1f2e 0%, #05070a 100%); z-index:10000; display:flex; align-items:center; justify-content:center; }
-    </style>
 </head>
 <body>
 
 <div id="login-screen">
-    <div class="card p-5 text-center" style="max-width: 400px; width: 100%;">
-        <img src="https://raw.githubusercontent.com/company93in-rgb/DE/refs/heads/main/LOGO.png" style="width: 150px; margin-bottom: 30px;" alt="Logo">
-        <label>System Passkey</label>
-        <input type="password" id="pass-input" class="form-control mb-3 text-center" placeholder="DASHBOARD PIN" style="letter-spacing: 10px; font-size: 1.5rem;">
-        <button onclick="checkAccess()" class="btn btn-primary w-100 py-3 fw-bold shadow-lg">ENTER TERMINAL</button>
+    <div style="background:#111; padding:40px; border-radius:15px; border:1px solid #333; width:350px; text-align:center;">
+        <h3 style="color:#0d6efd; font-weight:bold; margin-bottom:20px;">DARSHAN ENTERPRISE</h3>
+        <input type="password" id="pass-input" class="form-control mb-3" placeholder="Enter Dashboard PIN" style="text-align:center;">
+        <button onclick="checkAccess()" class="btn btn-primary w-100 fw-bold">Login to System</button>
     </div>
 </div>
 
 <div class="container-fluid">
     <div class="row">
-        <nav class="col-md-2 sidebar p-4">
-            <div class="mb-5 d-none d-md-block text-center"><img src="https://raw.githubusercontent.com/company93in-rgb/DE/refs/heads/main/LOGO.png" style="width: 100%; max-width: 160px;" alt="Logo"></div>
-            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist">
-                <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-inventory">📦 Inventory Control</button>
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-sales">💰 Billing Console</button>
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-ledger">📒 Customer Ledger</button>
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-history">🕒 Trans. History</button>
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-purchase">🛒 Stock Inward</button>
+        <nav class="col-md-2 d-none d-md-block bg-black sidebar vh-100 border-end border-secondary p-4 pt-5">
+            <div class="text-center mb-5">
+                <h4 class="fw-bold text-primary">Darshan Enterprise</h4>
+                <small class="fw-bold text-danger">Inventory & Sales</small>
             </div>
-            <div class="mt-auto pt-5 border-top border-secondary d-none d-md-block">
-                <button onclick="masterReset()" class="btn btn-sm btn-outline-danger w-100 border-0 mb-2">Master Reset</button>
-                <button onclick="handleLogout()" class="btn btn-link text-muted btn-sm w-100 text-decoration-none">🚪 Logout</button>
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist">
+                <button class="nav-link active text-start" data-bs-toggle="pill" data-bs-target="#tab-inventory">📦 Inventory</button>
+                <button class="nav-link text-start" data-bs-toggle="pill" data-bs-target="#tab-sales">💰 Sales (Billing)</button>
+                <button class="nav-link text-start" data-bs-toggle="pill" data-bs-target="#tab-ledger">📒 Customer Ledger</button>
+                <button class="nav-link text-start" data-bs-toggle="pill" data-bs-target="#tab-history">🕒 Trans. History</button>
+                <button class="nav-link text-start" data-bs-toggle="pill" data-bs-target="#tab-purchase">🛒 Purchase (In)</button>
+                <div class="mt-5 border-top border-secondary pt-3">
+                    <button onclick="downloadBackup()" class="btn btn-outline-success btn-sm w-100 mb-2">📥 Download CSV</button>
+                    <button onclick="masterReset()" class="btn btn-danger btn-sm w-100 mb-2">🔥 Master Reset</button>
+                    <button onclick="handleLogout()" class="btn btn-outline-secondary btn-sm w-100">🚪 Logout</button>
+                </div>
             </div>
         </nav>
 
         <main class="col-md-10 px-md-4 py-4">
-            <div class="row g-3 mb-4 text-center">
-                <div class="col-6 col-lg-3"><div class="stat-card stat-revenue"><small class="fw-bold">REVENUE</small><div class="stat-value" id="statRevenue">₹0</div></div></div>
-                <div class="col-6 col-lg-3"><div class="stat-card stat-stock"><small class="fw-bold">STOCK VALUE</small><div class="stat-value" id="statInvValue">₹0</div></div></div>
-                <div class="col-6 col-lg-3"><div class="stat-card stat-out"><small class="fw-bold">PENDING</small><div class="stat-value text-white" id="statOutstanding">₹0</div></div></div>
-                <div class="col-6 col-lg-3"><div class="stat-card stat-profit"><small class="fw-bold">TOTAL PROFIT</small><div class="stat-value text-white" id="statProfit">₹0</div></div></div>
+            <div class="row g-4 mb-4">
+                <div class="col-md-3"><div class="card p-3 border-start border-4 border-warning"><div class="text-warning small">TOTAL REVENUE</div><div class="stat-value" id="statRevenue">₹0.00</div></div></div>
+                <div class="col-md-3"><div class="card p-3 border-start border-4 border-info"><div class="text-info small">STOCK VALUE</div><div class="stat-value" id="statInvValue">₹0.00</div></div></div>
+                <div class="col-md-3"><div class="card p-3 border-start border-4 border-danger"><div class="text-danger small">OUTSTANDING</div><div class="stat-value text-danger" id="statOutstanding">₹0.00</div></div></div>
+                <div class="col-md-3"><div class="card p-3 border-start border-4 border-success"><div class="text-success small">TOTAL PROFIT</div><div class="stat-value text-success" id="statProfit">₹0.00</div></div></div>
             </div>
 
             <div class="tab-content">
                 <div class="tab-pane fade show active" id="tab-inventory">
-                    <div class="card p-4">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h3 class="fw-bold m-0">Stock Registry</h3>
-                            <div class="d-flex gap-2">
-                                <input type="text" id="inventorySearch" class="form-control" placeholder="Search product..." onkeyup="renderUI()" style="width: 200px;">
-                                <button class="btn btn-primary px-4" data-bs-toggle="modal" data-bs-target="#productModal">+ Add Product</button>
-                            </div>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3>Stock Registry</h3>
+                        <div class="d-flex gap-2">
+                            <input type="text" id="inventorySearch" class="form-control search-box mb-0" placeholder="Search product..." onkeyup="renderUI()">
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal">ADD</button>
                         </div>
-                        <div class="table-container"><div class="table-responsive"><table class="table text-center align-middle" id="stockTable"><thead><tr><th onclick="sortTable('stockTable',0)">Product ↕</th><th onclick="sortTable('stockTable',1)">Stock ↕</th><th>Retail Rate</th><th>Wholesale</th><th>Action</th></tr></thead><tbody id="inventoryList"></tbody></table></div></div>
                     </div>
+                    <div class="card p-3"><table class="table text-center"><thead><tr><th>Product</th><th>Stock</th><th>Sale Price</th><th>Purch. Price</th><th>Action</th></tr></thead><tbody id="inventoryList"></tbody></table></div>
                 </div>
 
                 <div class="tab-pane fade" id="tab-sales">
-                    <div class="row g-4">
-                        <div class="col-lg-5">
-                            <div class="card p-4">
-                                <div class="d-flex justify-content-between mb-3"><h4 class="fw-bold">New Invoice</h4><span class="badge bg-primary px-3 py-2" id="nextSerialNo">INV-0001</span></div>
-                                <label>Customer Identity</label>
-                                <input type="text" id="saleParty" class="form-control mb-2" placeholder="Full Name">
-                                <input type="text" id="salePhone" class="form-control mb-2" placeholder="Mobile Number">
-                                <input type="date" id="saleDate" class="form-control mb-3">
-                                <div class="form-check form-switch mb-3">
-                                    <input class="form-check-input" type="checkbox" id="pricingToggle">
-                                    <label class="form-check-label text-info fw-bold small" for="pricingToggle">ACTIVATE WHOLESALE PRICING</label>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-12">
+                            <div class="card p-3">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <h6 class="text-primary fw-bold">Sales Analysis Summary</h6>
+                                    <button onclick="printSummaryReport()" class="btn btn-outline-info btn-sm">🖨️ Print Report</button>
                                 </div>
-                                <label>Select Items</label>
-                                <select id="saleItem" class="form-select mb-2"></select>
-                                <div class="row g-2 mb-3">
-                                    <div class="col-6"><input type="number" id="saleQty" class="form-control" placeholder="Qty"></div>
-                                    <div class="col-6"><input type="number" id="saleGst" class="form-control" value="18"></div>
+                                <div class="d-flex flex-wrap gap-3">
+                                    <div class="summary-badge"><small class="text-warning d-block">TODAY'S SALES</small><span class="fw-bold text-info" id="daySales">₹0.00</span></div>
+                                    <div class="summary-badge"><small class="text-warning d-block">TODAY'S PROFIT</small><span class="fw-bold text-success" id="dayProfit">₹0.00</span></div>
+                                    <div class="summary-badge"><small class="text-warning d-block">MONTHLY SALES</small><span class="fw-bold text-info" id="monthSales">₹0.00</span></div>
+                                    <div class="summary-badge"><small class="text-warning d-block">MONTHLY PROFIT</small><span class="fw-bold text-success" id="monthProfit">₹0.00</span></div>
                                 </div>
-                                <button onclick="addToCart()" class="btn btn-outline-primary w-100 mb-3">+ Add to List</button>
-                                <label>Payment Received</label>
-                                <input type="number" id="salePaidAmount" class="form-control" placeholder="Cash Amount ₹">
                             </div>
                         </div>
-                        <div class="col-lg-7">
-                            <div class="card p-4 d-flex flex-column" style="min-height: 500px;">
-                                <h4 class="fw-bold mb-4 text-cyan">Live Cart Registry</h4>
-                                <div id="cartDisplay" class="flex-grow-1"></div>
-                                <div class="pt-4 border-top border-secondary mt-auto text-center">
-                                    <div class="d-flex justify-content-between mb-4"><span class="text-muted fw-bold">TOTAL:</span><h1 class="fw-bold m-0" id="cartTotalDisplay">₹0.00</h1></div>
-                                    <button onclick="finalizeSale()" class="btn btn-success w-100 py-3 shadow-lg fw-bold">SAVE & OPEN HISTORY</button>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="card p-4">
+                                <h5 class="fw-bold text-primary mb-3">Billing Section</h5>
+                                <div class="mb-3">
+                                    <label class="small text-info d-block">Invoice No.</label>
+                                    <span id="nextSerialNo" class="badge bg-primary fs-6">INV-0001</span>
+                                    <button id="cancelEditBtn" class="btn btn-link btn-sm text-danger d-none" onclick="cancelEditMode()">Cancel Edit</button>
+                                </div>
+                                <input type="text" id="saleParty" class="form-control mb-2" placeholder="Customer Name *">
+                                <input type="text" id="salePhone" class="form-control mb-2" placeholder="Contact Number *">
+                                <input type="email" id="saleEmail" class="form-control mb-2" placeholder="Email ID">
+                                <input type="date" id="saleDate" class="form-control mb-3">
+                                <hr class="border-secondary">
+                                <select id="saleItem" class="form-select mb-2"></select>
+                                <div class="row g-2 mb-3">
+                                    <div class="col-6"><input type="number" id="saleQty" class="form-control" placeholder="Quantity (+/-)"></div>
+                                    <div class="col-6"><input type="number" id="saleGst" class="form-control" value="18" placeholder="GST %"></div>
+                                </div>
+                                <button onclick="addToCart()" class="btn btn-outline-primary w-100 mb-3">+ Add/Update List</button>
+                                <label class="small text-info">Amount Paid (₹)</label>
+                                <input type="number" id="salePaidAmount" class="form-control mb-2" placeholder="Amount Paid by Customer">
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="card p-4 h-100">
+                                <h5 class="fw-bold mb-3">Invoice Cart</h5>
+                                <div id="cartDisplay" class="flex-grow-1" style="min-height: 250px;"><p class="text-success text-center mt-5">No items added to cart</p></div>
+                                <div class="border-top border-secondary pt-3 mt-3">
+                                    <div class="d-flex justify-content-between mb-3"><h3>Total: <span id="cartTotalDisplay">₹0.00</span></h3></div>
+                                    <button id="saveSaleBtn" onclick="finalizeSale()" class="btn btn-success w-100 py-3 fw-bold">Finalize Sale & Generate PDF</button>
                                 </div>
                             </div>
                         </div>
@@ -157,58 +114,65 @@
                 </div>
 
                 <div class="tab-pane fade" id="tab-ledger">
-                    <div class="card p-4"><h3 class="fw-bold mb-4">Client Receivables</h3><div class="table-container"><div class="table-responsive"><table class="table text-center align-middle" id="ledgerTable"><thead><tr><th>Name</th><th>Billed</th><th>Settled</th><th>Balance</th><th>Statement</th><th>Pay</th></tr></thead><tbody id="ledgerList"></tbody></table></div></div></div>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3>Customer Ledger</h3>
+                        <input type="text" id="ledgerSearch" class="form-control search-box" placeholder="Search customer..." onkeyup="renderUI()">
+                    </div>
+                    <div class="card p-3"><table class="table text-center"><thead><tr><th>Customer Name</th><th>Total Billed</th><th>Total Paid</th><th>Outstanding</th><th>Action</th></tr></thead><tbody id="ledgerList"></tbody></table></div>
                 </div>
 
                 <div class="tab-pane fade" id="tab-history">
-                    <div class="card p-4"><h3 class="fw-bold mb-4">Transaction Vault</h3><div class="table-container"><div class="table-responsive"><table class="table text-center align-middle" id="historyTable"><thead><tr><th>Ref No</th><th>Date</th><th>Customer</th><th>Amount</th><th>Status</th><th>Download</th></tr></thead><tbody id="historyList"></tbody></table></div></div></div>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3>Transaction History</h3>
+                        <input type="text" id="historySearch" class="form-control search-box" placeholder="Search Inv/Name..." onkeyup="renderUI()">
+                    </div>
+                    <div class="card p-3"><table class="table text-center"><thead><tr><th>Inv/Receipt</th><th>Date</th><th>Party Name</th><th>Total</th><th>Paid</th><th>Action</th></tr></thead><tbody id="historyList"></tbody></table></div>
                 </div>
 
                 <div class="tab-pane fade" id="tab-purchase">
-                    <div class="card p-5 text-center mx-auto" style="max-width: 500px;"><h4 class="mb-4 fw-bold">Restock Inventory</h4><select id="purchaseItem" class="form-select mb-3"></select><input type="number" id="purchaseQty" class="form-control mb-4 text-center" placeholder="Quantity Added"><button onclick="processPurchase()" class="btn btn-primary w-100 py-3">Update Cloud Registry</button></div>
+                    <div class="card p-4 w-50 mx-auto">
+                        <h5>Quick Inward (Update Stock)</h5>
+                        <select id="purchaseItem" class="form-select mb-2"></select>
+                        <input type="number" id="purchaseQty" class="form-control mb-2" placeholder="Qty Added">
+                        <button onclick="processPurchase()" class="btn btn-primary w-100">Update Inventory</button>
+                    </div>
                 </div>
             </div>
         </main>
     </div>
 </div>
 
-<div class="modal fade" id="productModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content card p-4">
-    <h4 class="mb-4 text-center">Register Item</h4>
-    <input type="text" id="pName" class="form-control mb-3" placeholder="Product Name">
-    <div class="row g-2 mb-3"><div class="col-6"><input type="number" id="pSale" class="form-control" placeholder="Retail Rate"></div><div class="col-6"><input type="number" id="pWhole" class="form-control" placeholder="Wholesale"></div></div>
-    <div class="row g-2 mb-3"><div class="col-6"><input type="number" id="pPurch" class="form-control" placeholder="Cost Price"></div><div class="col-6"><input type="number" id="pStock" class="form-control" placeholder="Qty"></div></div>
-    <button onclick="saveProduct()" class="btn btn-primary w-100 py-3">SYNC TO CLOUD</button>
-</div></div></div>
+<div class="modal fade" id="productModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content bg-dark border-secondary"><div class="modal-body p-4">
+    <h5 class="mb-3">Register New Product</h5>
+    <input type="text" id="pName" class="form-control mb-2" placeholder="Product Name (Exact matching for DVR/Model)">
+    <div class="row g-2 mb-2"><div class="col"><input type="number" id="pSale" class="form-control" placeholder="Selling Rate"></div><div class="col"><input type="number" id="pPurch" class="form-control" placeholder="Purchase Rate"></div></div>
+    <input type="number" id="pStock" class="form-control mb-3" placeholder="Current Stock Qty">
+    <button onclick="saveProduct()" class="btn btn-primary w-100">Sync to Cloud Inventory</button>
+</div></div></div></div>
 
-<div class="modal fade" id="payModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content card p-4 text-center">
-    <h4 class="mb-3 text-success">Settle Due Balance</h4>
-    <p id="payPartyDisplay" class="fw-bold mb-1"></p>
-    <p id="payInvDisplay" class="text-muted small mb-4"></p>
-    <input type="number" id="receivePayAmount" class="form-control mb-4 text-center" placeholder="Cash Amount Received">
-    <button onclick="submitPayment()" class="btn btn-success w-100 py-3 fw-bold">RECORD PAYMENT</button>
-</div></div></div>
+<div class="modal fade" id="payModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content bg-dark border-secondary"><div class="modal-body p-4 text-center">
+    <h5 class="mb-3 text-success">Receive Payment</h5>
+    <p id="payPartyDisplay" class="fw-bold"></p>
+    <p id="payInvDisplay" class="small text-muted"></p>
+    <input type="number" id="receivePayAmount" class="form-control mb-3 text-center" placeholder="Amount Received">
+    <button onclick="submitPayment()" class="btn btn-success w-100 fw-bold">Confirm & Generate Receipt</button>
+</div></div></div></div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+<script src="config.js"></script>
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, query, orderBy, writeBatch, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig = {
-    apiKey: "AIzaSyB9jtycRyMaTweY2zxlp115Fj_9rU0k9hU",
-    authDomain: "data-store-6137a.firebaseapp.com",
-    projectId: "data-store-6137a",
-    storageBucket: "data-store-6137a.firebasestorage.app",
-    messagingSenderId: "329665997160",
-    appId: "1:329665997160:web:09a57664fc7f0dd6a3cedd",
-    measurementId: "G-PBE7WGMDQG"
-  };
   
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const productsCol = collection(db, "products"), transactionsCol = collection(db, "transactions");
+    const productsCol = collection(db, "products");
+    const transactionsCol = collection(db, "transactions");
 
-    let logoData = null, products = [], transactions = [], cart = [], activePayParty = "", activeBalance = 0;
+    let logoData = null;
     const logoUrl = "https://raw.githubusercontent.com/company93in-rgb/DE/refs/heads/main/LOGO.png";
 
     function preloadLogo() {
@@ -218,159 +182,252 @@ const firebaseConfig = {
     }
     preloadLogo();
 
-    window.checkAccess = () => { if(document.getElementById('pass-input').value === "DADA") { document.getElementById('login-screen').style.display = 'none'; sessionStorage.setItem('isAuth', 'true'); } else alert("Wrong Access Code"); };
+    let products = [], transactions = [], cart = [], existingParties = new Set();
+    let activePayParty = "", activeCurrentBalance = 0;
+    let editMode = false, editTransactionId = null;
+
+    function formatPdfDate(dateStr) {
+        const d = new Date(dateStr);
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        return `${String(d.getDate()).padStart(2, '0')}-${months[d.getMonth()]}-${d.getFullYear()}`;
+    }
+
+    window.checkAccess = () => { if(document.getElementById('pass-input').value === "DADA") { document.getElementById('login-screen').style.display = 'none'; sessionStorage.setItem('isAuth', 'true'); } else alert("Wrong PIN"); };
+    window.handleLogout = () => { sessionStorage.clear(); location.reload(); };
     if(sessionStorage.getItem('isAuth')) document.getElementById('login-screen').style.display = 'none';
 
     onSnapshot(productsCol, snap => { products = snap.docs.map(d => ({id: d.id, ...d.data()})); renderUI(); });
-    onSnapshot(query(transactionsCol, orderBy("timestamp", "desc")), snap => { transactions = snap.docs.map(d => ({id: d.id, ...d.data()})); renderUI(); });
+    onSnapshot(query(transactionsCol, orderBy("timestamp", "desc")), snap => { 
+        transactions = snap.docs.map(d => ({id: d.id, ...d.data()})); 
+        existingParties = new Set(transactions.map(t => t.partyName));
+        renderUI(); 
+    });
 
     window.renderUI = () => {
+        const today = new Date().toISOString().split('T')[0];
+        const thisMonth = today.substring(0, 7);
+        if(!document.getElementById('saleDate').value) document.getElementById('saleDate').value = today;
+        
         const allSales = transactions.filter(t => t.type === 'SALE');
+        const todaySales = allSales.filter(s => s.date === today);
+        const monthSalesList = allSales.filter(s => s.date.startsWith(thisMonth));
+        
+        document.getElementById('daySales').innerText = `₹${todaySales.reduce((a,b) => a + (b.grandTotal || 0), 0).toFixed(2)}`;
+        document.getElementById('dayProfit').innerText = `₹${todaySales.reduce((a,b) => a + (b.totalProfit || 0), 0).toFixed(2)}`;
+        document.getElementById('monthSales').innerText = `₹${monthSalesList.reduce((a,b) => a + (b.grandTotal || 0), 0).toFixed(2)}`;
+        document.getElementById('monthProfit').innerText = `₹${monthSalesList.reduce((a,b) => a + (b.totalProfit || 0), 0).toFixed(2)}`;
+
         document.getElementById('statRevenue').innerText = `₹${allSales.reduce((a,b) => a + (b.grandTotal || 0), 0).toLocaleString()}`;
         document.getElementById('statProfit').innerText = `₹${allSales.reduce((a,b) => a + (b.totalProfit || 0), 0).toLocaleString()}`;
         document.getElementById('statOutstanding').innerText = `₹${allSales.reduce((a,b) => a + (b.balance || 0), 0).toLocaleString()}`;
         document.getElementById('statInvValue').innerText = `₹${products.reduce((a,b) => a + ((b.stock || 0) * (b.purchPrice || 0)), 0).toLocaleString()}`;
         
-        // Stock Display
-        document.getElementById('inventoryList').innerHTML = products.map(p => {
-            let badge = p.stock <= 5 ? "badge-low-stock" : "bg-dark border border-secondary";
-            return `<tr><td class="text-start ps-4 fw-bold">${p.name}</td><td><span class="badge ${badge} px-3">${p.stock}</span></td><td>₹${p.salePrice}</td><td>₹${p.wholePrice||'N/A'}</td><td><button onclick="deleteProduct('${p.id}')" class="btn btn-sm btn-link text-danger">🗑️</button></td></tr>`;
-        }).join('');
+        if(!editMode) {
+            const actualInv = allSales.filter(s => s.invoiceNo && s.invoiceNo.startsWith("INV-"));
+            document.getElementById('nextSerialNo').innerText = "INV-" + String(actualInv.length + 1).padStart(4, '0');
+        }
 
-        // Ledger Display
+        const opts = products.map(p => `<option value="${p.id}">${p.name} (Stock: ${p.stock})</option>`).join('');
+        document.getElementById('saleItem').innerHTML = opts; document.getElementById('purchaseItem').innerHTML = opts;
+
+        const invQuery = (document.getElementById('inventorySearch').value || "").toLowerCase();
+        document.getElementById('inventoryList').innerHTML = products.filter(p => p.name.toLowerCase().includes(invQuery)).map(p => `<tr><td>${p.name}</td><td>${p.stock}</td><td>₹${p.salePrice}</td><td>₹${p.purchPrice}</td><td><button onclick="deleteProduct('${p.id}')" class="btn btn-sm btn-outline-danger">🗑️</button></td></tr>`).join('');
+
+        const ledgerQuery = (document.getElementById('ledgerSearch').value || "").toLowerCase();
         const ledgerMap = {};
         allSales.forEach(s => {
-            const n = s.partyName || "Generic";
+            const n = s.partyName || "Cash Customer";
             if(!ledgerMap[n]) ledgerMap[n] = { billed: 0, paid: 0, balance: 0 };
             ledgerMap[n].billed += (s.grandTotal || 0); ledgerMap[n].paid += (s.paidAmount || 0); ledgerMap[n].balance += (s.balance || 0);
         });
-        document.getElementById('ledgerList').innerHTML = Object.keys(ledgerMap).map(n => `<tr><td class="text-start fw-bold ps-4">${n}</td><td>₹${ledgerMap[n].billed}</td><td>₹${ledgerMap[n].paid}</td><td class="text-danger fw-bold">₹${ledgerMap[n].balance}</td><td><button onclick="printStatement('${n}',${ledgerMap[n].billed},${ledgerMap[n].paid},${ledgerMap[n].balance})" class="btn btn-sm btn-link text-info">📄</button></td><td><button onclick="openPayModal('${n}',${ledgerMap[n].balance})" class="btn btn-sm btn-primary rounded-pill px-3">Pay</button></td></tr>`).join('');
+        document.getElementById('ledgerList').innerHTML = Object.keys(ledgerMap).filter(name => name.toLowerCase().includes(ledgerQuery)).map(name => `<tr><td>${name}</td><td>₹${ledgerMap[name].billed.toFixed(2)}</td><td class="text-success">₹${ledgerMap[name].paid.toFixed(2)}</td><td class="text-danger fw-bold">₹${ledgerMap[name].balance.toFixed(2)}</td><td><button onclick="openPayModal('${name}', ${ledgerMap[name].balance})" class="btn btn-sm btn-primary">Pay Balance</button></td></tr>`).join('');
 
-        // History Display
-        document.getElementById('historyList').innerHTML = allSales.map(s => `<tr><td><span class="badge bg-primary px-3 rounded-pill">${s.invoiceNo}</span></td><td>${s.date}</td><td class="text-start fw-bold">${s.partyName}</td><td>₹${s.grandTotal}</td><td><span class="${s.balance <= 0 ? 'text-success':'text-danger'} fw-bold">${s.balance <= 0 ? 'Paid':'Due'}</span></td><td><button onclick="downloadSpecificInvoice('${s.id}')" class="btn btn-sm btn-success px-2">📥 PDF</button></td></tr>`).join('');
+        const histQuery = (document.getElementById('historySearch').value || "").toLowerCase();
+        document.getElementById('historyList').innerHTML = allSales.filter(s => (s.invoiceNo && s.invoiceNo.toLowerCase().includes(histQuery)) || (s.partyName && s.partyName.toLowerCase().includes(histQuery))).map(s => `<tr><td><span class="badge ${s.invoiceNo.startsWith('INV')?'bg-primary':'bg-success'}">${s.invoiceNo}</span></td><td>${s.date}</td><td>${s.partyName}</td><td>₹${(s.grandTotal || 0).toFixed(2)}</td><td class="text-info">₹${(s.paidAmount || 0).toFixed(2)}</td><td>${s.invoiceNo.startsWith('INV') ? `<button onclick="initiateEdit('${s.id}')" class="btn btn-sm btn-outline-warning">✏️ Edit</button>` : `<span class="text-muted small">Receipt</span>`}</td></tr>`).join('');
+    };
 
-        document.getElementById('saleItem').innerHTML = products.map(p => `<option value="${p.id}">${p.name} (${p.stock})</option>`).join('');
-        document.getElementById('purchaseItem').innerHTML = document.getElementById('saleItem').innerHTML;
+    window.saveProduct = async () => {
+        const n = document.getElementById('pName').value, s = parseFloat(document.getElementById('pSale').value), p = parseFloat(document.getElementById('pPurch').value), q = parseFloat(document.getElementById('pStock').value);
+        if(!n || isNaN(s) || isNaN(p) || isNaN(q)) return alert("Fill all product details!");
+        try {
+            await addDoc(productsCol, { name: n, salePrice: s, purchPrice: p, stock: q });
+            bootstrap.Modal.getInstance(document.getElementById('productModal')).hide();
+            // Clear inputs
+            document.getElementById('pName').value = ''; document.getElementById('pSale').value = ''; document.getElementById('pPurch').value = ''; document.getElementById('pStock').value = '';
+        } catch(e) { alert("Cloud Sync Failed: " + e.message); }
     };
 
     window.addToCart = () => {
         const id = document.getElementById('saleItem').value, qtyIn = parseFloat(document.getElementById('saleQty').value), gstP = parseFloat(document.getElementById('saleGst').value) || 0, p = products.find(x => x.id === id);
-        if (!p || !qtyIn) return;
-        const price = document.getElementById('pricingToggle').checked ? (p.wholePrice || p.salePrice) : p.salePrice;
-        const tax = (qtyIn * price) * (gstP/100);
-        cart.push({ id, name: p.name, qty: qtyIn, salePrice: price, purchPrice: p.purchPrice, gstP, tax, total: (qtyIn * price) + tax });
-        updateCartUI(); 
+        if (!p || isNaN(qtyIn) || qtyIn === 0) return alert("Invalid Qty");
+        const idx = cart.findIndex(item => item.id === id);
+        if (idx > -1) {
+            const newQty = cart[idx].qty + qtyIn;
+            if (newQty < 0) return alert("Quantity cannot be negative");
+            if (p.stock < newQty) return alert("Insufficient Stock");
+            if (newQty === 0) cart.splice(idx, 1);
+            else { cart[idx].qty = newQty; cart[idx].tax = (newQty * p.salePrice) * (gstP/100); cart[idx].total = (newQty * p.salePrice) + cart[idx].tax; }
+        } else {
+            if (qtyIn < 0 || p.stock < qtyIn) return alert("Check Stock/Qty");
+            const tax = (qtyIn * p.salePrice) * (gstP/100);
+            cart.push({ id, name: p.name, qty: qtyIn, salePrice: p.salePrice, purchPrice: p.purchPrice, gstP, tax, total: (qtyIn * p.salePrice) + tax });
+        }
+        updateCartUI(); document.getElementById('saleQty').value = '';
     };
 
-    function updateCartUI() {
-        document.getElementById('cartDisplay').innerHTML = cart.map((item, i) => `<div class="cart-item d-flex justify-content-between"><div><b>${item.name}</b> (x${item.qty})</div><div class="fw-bold">₹${item.total.toFixed(0)} <button onclick="removeFromCart(${i})" class="btn btn-sm text-danger ms-1">✕</button></div></div>`).join('');
-        document.getElementById('cartTotalDisplay').innerText = `₹${cart.reduce((a,b) => a + b.total, 0).toFixed(0)}`;
-    }
+    window.initiateEdit = async (id) => {
+        if(prompt("Enter Secret Key to Edit (DADA):") !== "DADA") return alert("Wrong Key!");
+        const txn = transactions.find(t => t.id === id);
+        if(!txn) return alert("Transaction not found.");
+
+        editMode = true; editTransactionId = id;
+        document.getElementById('cancelEditBtn').classList.remove('d-none');
+        document.getElementById('saveSaleBtn').innerText = "Update & Save Invoice";
+        document.getElementById('nextSerialNo').innerText = txn.invoiceNo;
+        document.getElementById('saleParty').value = txn.partyName;
+        document.getElementById('salePhone').value = txn.partyPhone || "";
+        document.getElementById('saleEmail').value = txn.partyEmail || "";
+        document.getElementById('saleDate').value = txn.date;
+        document.getElementById('salePaidAmount').value = txn.paidAmount;
+
+        const batch = writeBatch(db);
+        txn.items.forEach(item => { const p = products.find(prod => prod.id === item.id); if(p) batch.update(doc(db, "products", item.id), { stock: p.stock + item.qty }); });
+        await batch.commit();
+
+        cart = [...txn.items]; updateCartUI();
+        const tabBtn = document.querySelector('[data-bs-target="#tab-sales"]');
+        new bootstrap.Tab(tabBtn).show();
+    };
 
     window.finalizeSale = async () => {
-        if(cart.length === 0) return alert("Cart empty");
-        const party = document.getElementById('saleParty').value.trim(), phone = document.getElementById('salePhone').value.trim(), date = document.getElementById('saleDate').value;
-        if(!party) return alert("Name required");
+        if(cart.length === 0) return alert("Cart is empty");
+        const party = document.getElementById('saleParty').value.trim(), phone = document.getElementById('salePhone').value.trim(), invNo = document.getElementById('nextSerialNo').innerText, date = document.getElementById('saleDate').value, email = document.getElementById('saleEmail').value.trim();
+        if(!party || !phone) return alert("Name & Phone mandatory!");
+        if (!editMode && existingParties.has(party) && !confirm("Duplicate Customer Name! OK to proceed?")) return;
+
         const total = cart.reduce((a,b) => a + b.total, 0), paid = parseFloat(document.getElementById('salePaidAmount').value) || 0;
-        const invNo = "INV-" + String(transactions.filter(t=>t.invoiceNo?.startsWith('INV')).length + 1).padStart(4, '0');
         try {
             const batch = writeBatch(db);
-            cart.forEach(i => batch.update(doc(db, "products", i.id), { stock: products.find(x => x.id === i.id).stock - i.qty }));
-            const obj = { type:'SALE', invoiceNo:invNo, partyName:party, partyPhone:phone, date, items:[...cart], grandTotal:total, paidAmount:paid, balance:total-paid, totalProfit:cart.reduce((a,b) => a + ((b.salePrice-b.purchPrice)*b.qty), 0), timestamp:Date.now() };
-            await addDoc(transactionsCol, obj); await batch.commit();
-            cart = []; updateCartUI(); document.getElementById('saleParty').value = '';
-            alert("Saved Successfully! View vault for PDF.");
-            new bootstrap.Tab(document.querySelector('[data-bs-target="#tab-history"]')).show();
-        } catch(e) { console.error(e); }
+            cart.forEach(item => { batch.update(doc(db, "products", item.id), { stock: products.find(x => x.id === item.id).stock - item.qty }); });
+            const obj = { type: 'SALE', invoiceNo: invNo, partyName: party, partyPhone: phone, partyEmail: email, date, items: cart, grandTotal: total, paidAmount: paid, balance: total - paid, totalProfit: cart.reduce((a,b) => a + ((b.salePrice - b.purchPrice) * b.qty), 0), timestamp: Date.now() };
+            if(editMode) await updateDoc(doc(db, "transactions", editTransactionId), obj);
+            else await addDoc(transactionsCol, obj);
+            await batch.commit(); generatePDF(invNo, party, phone, email, date, cart, total, paid, (total - paid)); cancelEditMode(); alert("Success!");
+        } catch(e) { alert(e.message); }
     };
 
-    window.downloadSpecificInvoice = (id) => {
-        const s = transactions.find(t => t.id === id);
-        if(!s) return;
+    window.cancelEditMode = () => { editMode = false; editTransactionId = null; cart = []; updateCartUI(); document.getElementById('cancelEditBtn').classList.add('d-none'); document.getElementById('saveSaleBtn').innerText = "Finalize Sale & Generate PDF"; document.getElementById('saleParty').value = ''; document.getElementById('salePhone').value = ''; document.getElementById('saleEmail').value = ''; document.getElementById('salePaidAmount').value = ''; renderUI(); };
+
+    function updateCartUI() {
+        const d = document.getElementById('cartDisplay');
+        if(cart.length === 0) { d.innerHTML = `<p class="text-muted text-center mt-5">Cart is empty</p>`; return; }
+        d.innerHTML = cart.map((item, i) => `<div class="cart-item d-flex justify-content-between align-items-center"><div><b>${item.name}</b> (x${item.qty})</div><div>₹${item.total.toFixed(2)} <button onclick="removeFromCart(${i})" class="btn btn-sm text-danger">✕</button></div></div>`).join('');
+        document.getElementById('cartTotalDisplay').innerText = `₹${cart.reduce((a,b) => a + b.total, 0).toFixed(2)}`;
+    }
+
+    window.removeFromCart = (i) => { cart.splice(i, 1); updateCartUI(); };
+
+    function generatePDF(inv, party, phone, email, date, items, total, paid, bal) {
         const { jsPDF } = window.jspdf; const doc = new jsPDF();
-        const totalTax = s.items.reduce((sum, i) => sum + (i.tax || 0), 0);
+        const formattedDate = formatPdfDate(date);
+        const totalTax = items.reduce((sum, item) => sum + (item.tax || 0), 0);
+        
         if (logoData) doc.addImage(logoData, 'PNG', 15, 8, 25, 25);
         doc.setFontSize(22); doc.setTextColor(13, 110, 253); doc.text("DARSHAN ENTERPRISE", 105, 18, { align: "center" });
-        doc.setFontSize(9); doc.setTextColor(80); doc.text("K***********AD | CONTACT: +91 9********3", 105, 25, { align: "center" });
+        doc.setFontSize(9); doc.setTextColor(80); doc.text("Kshetrapal Temple | Sadashivgad, Kawar - 581352", 105, 25, { align: "center" });
+        doc.setFontSize(9); doc.setTextColor(80); doc.text("Contact: +91-9008233193 | Gmail: darshan.raikar325@gmail.com", 105, 30, { align: "center" });
         doc.line(20, 36, 190, 36); doc.setTextColor(0); doc.setFontSize(10);
-        doc.text(`Invoice: ${s.invoiceNo}`, 20, 42); doc.text(`Party: ${s.partyName}`, 20, 48); doc.text(`Phone: ${s.partyPhone}`, 20, 54); doc.text(`Date: ${s.date}`, 150, 42);
-        doc.autoTable({ startY: 60, head: [['Item Name', 'Qty', 'Rate', 'GST%', 'Tax', 'Total']], body: s.items.map(i => [i.name, i.qty, i.salePrice, i.gstP+"%", i.tax.toFixed(2), i.total.toFixed(2)]), foot: [['','','','','Tax Total:', "₹"+totalTax.toFixed(2)],['','','','','Grand Total:', "₹"+s.grandTotal.toFixed(2)],['','','','','Paid:', "₹"+s.paidAmount.toFixed(2)],['','','','','Balance:', "₹"+(s.balance).toFixed(2)]], theme: 'grid', headStyles:{fillColor:[13,110,253]}, footStyles:{fillColor:[255,255,255], textColor:0, fontStyle:'bold'} });
-        const fy = doc.lastAutoTable.finalY + 10;
-        doc.setFont(undefined, 'bold'); doc.text("Bank Account Details:", 20, fy); doc.setFont(undefined, 'normal');
-        doc.text("Bank Name: B****************", 20, fy + 7); doc.text("A/c: 645*********8", 20, fy + 13); doc.text("IFSC: B*************W", 20, fy + 19);
-        const ty = fy + 30; doc.setFont(undefined, 'bold'); doc.text("Terms and Conditions:", 20, ty); doc.setFontSize(8);
-        const terms = ["1. Not responsible for transit damage.","2. Goods once sold not taken back.","3. Abuse/burn damages not covered."];
-        terms.forEach((t, i) => doc.text(t, 20, ty + 6 + (i * 5)));
-        doc.setFontSize(10); doc.text("Thank you for choosing Darshan Enterprise! We appreciate your business.", 105, ty + 25, { align: "center" });
-        doc.setFontSize(11); doc.text("Authorized Signatory", 150, doc.internal.pageSize.height - 25);
-        doc.save(`${s.invoiceNo}.pdf`);
-    };
+        doc.text(`Invoice: ${inv}`, 20, 42); doc.text(`Party: ${party}`, 20, 48); doc.text(`Phone: ${phone}`, 20, 54);
+        doc.text("Prop. : Darshan D Raikar", 150, 42);
+         doc.text("GSTIN : 29AMJPR9814J1Z9", 150, 47)
+        doc.text(`Date: ${formattedDate}`, 150, 52);
+        
 
-    window.openPayModal = (p, b) => { activePayParty = p; activeBalance = b; document.getElementById('payPartyDisplay').innerText = p; document.getElementById('payInvDisplay').innerText = "Due: ₹" + b; document.getElementById('receivePayAmount').value = b; new bootstrap.Modal(document.getElementById('payModal')).show(); };
+        doc.autoTable({ 
+            startY: 60, 
+            head: [['Item Name', 'Qty', 'Rate', 'GST%', 'Tax Amt', 'Total']], 
+            body: items.map(i => [i.name, i.qty, i.salePrice, i.gstP + "%", i.tax.toFixed(2), i.total.toFixed(2)]), 
+            
+            foot: [
+                ['','','','','Tax Total:', "₹" + totalTax.toFixed(2)],
+                ['','','','','Grand Total:', "₹" + total.toFixed(2)],
+                ['','','','','Amount Paid:', "₹" + paid.toFixed(2)],
+                ['','','','','Balance:', "₹" + bal.toFixed(2)]
+            ], 
+            theme: 'grid', 
+            headStyles: {fillColor:[13,110,253]}, 
+            footStyles: {fillColor:[255,255,255], textColor:0, fontStyle:'bold'} 
+        });
+
+        const fy = doc.lastAutoTable.finalY + 10;
+      
+
+        doc.setFontSize(11); doc.setFont(undefined, 'bold'); doc.text("Bank Account Details:", 20, fy);
+        doc.setFontSize(10); doc.setFont(undefined, 'normal');
+        doc.text("Bank Name: Bank of Baroda", 20, fy + 7); doc.text("A/c: 64540200001518", 20, fy + 13); doc.text("IFSC: BARB0VJKARW", 20, fy + 19);
+        
+        const ty = fy + 30; doc.setFont(undefined, 'bold'); doc.text("Terms and Conditions:", 20, ty);
+        doc.setFontSize(8); doc.setFont(undefined, 'normal');
+        const terms = ["1. We are not responsible for damage during transit.","2. Goods once sold will not taken back/Exchange.","3. Warranty claims subject to manufacture terms.","4. Abuse/burn damages not covered."];
+        terms.forEach((t, i) => doc.text(t, 20, ty + 6 + (i * 5), { align: 'justify', maxWidth: 170 }));
+         doc.setFontSize(11); doc.setFont(undefined, 'bold'); doc.text("DARSHAN ENTERPRISE", 145, doc.internal.pageSize.height - 15);
+        doc.setFontSize(11); doc.setFont(undefined, 'bold'); doc.text("Authorized Signatory", 145, doc.internal.pageSize.height - 25);
+        doc.save(`${inv}.pdf`);
+    }
+
+    window.openPayModal = (p, b) => { activePayParty = p; activeCurrentBalance = b; document.getElementById('payPartyDisplay').innerText = p; document.getElementById('payInvDisplay').innerText = "Outstanding Balance: ₹" + b.toFixed(2); document.getElementById('receivePayAmount').value = b.toFixed(2); new bootstrap.Modal(document.getElementById('payModal')).show(); };
     window.submitPayment = async () => {
         const amt = parseFloat(document.getElementById('receivePayAmount').value);
-        if(!amt) return;
-        const rcp = "RCP-" + Date.now().toString().slice(-4);
-        await addDoc(transactionsCol, { type:'SALE', invoiceNo:rcp, partyName:activePayParty, date:new Date().toISOString().split('T')[0], grandTotal:0, paidAmount:amt, balance:-amt, totalProfit:0, items:[], timestamp:Date.now() });
-        bootstrap.Modal.getInstance(document.getElementById('payModal')).hide();
-        generateReceiptPDF(rcp, activePayParty, amt, activeBalance - amt);
+        if(isNaN(amt) || amt <= 0) return alert("Invalid amount");
+        const rcpNo = "RCP-" + Date.now().toString().slice(-4);
+        const ref = transactions.find(t => t.partyName === activePayParty && t.invoiceNo.startsWith('INV-'))?.invoiceNo || "General Settlement";
+        try {
+            await addDoc(transactionsCol, { type: 'SALE', invoiceNo: rcpNo, partyName: activePayParty, date: new Date().toISOString().split('T')[0], grandTotal: 0, paidAmount: amt, balance: -amt, totalProfit: 0, items: [], timestamp: Date.now() });
+            bootstrap.Modal.getInstance(document.getElementById('payModal')).hide();
+            generateReceiptPDF(rcpNo, ref, activePayParty, amt, activeCurrentBalance - amt);
+            alert("Payment recorded!");
+        } catch(e) { alert(e.message); }
     };
 
-    function generateReceiptPDF(rcp, party, amt, rem) {
+    function generateReceiptPDF(rcp, ref, party, amt, rem) {
         const { jsPDF } = window.jspdf; const doc = new jsPDF();
-        if (logoData) doc.addImage(logoData, 'PNG', 15, 8, 25, 25);
+        if (logoData) doc.addImage(logoData, 'PNG', 15, 8, 20, 20);
         doc.setFontSize(22); doc.setTextColor(25, 135, 84); doc.text("DARSHAN ENTERPRISE", 105, 18, { align: "center" });
         doc.setFontSize(14); doc.text("PAYMENT RECEIPT", 105, 30, { align: "center" });
-        doc.line(20, 35, 190, 35);
-        doc.setTextColor(0); doc.setFontSize(11);
-        doc.text(`Receipt: ${rcp}`, 20, 45); doc.text(`Date: ${new Date().toLocaleDateString()}`, 150, 45);
-        doc.text(`Received from: ${party}`, 20, 60);
-        doc.autoTable({ startY: 70, head: [['Description', 'Amount']], body: [['Settlement against outstanding balance', "Rs " + amt.toFixed(2)]], theme: 'grid', headStyles:{fillColor:[25, 135, 84]} });
-        doc.text(`Remaining Balance: Rs ${rem.toFixed(2)}`, 20, doc.lastAutoTable.finalY + 15);
-        doc.text("Authorized Signatory", 150, doc.lastAutoTable.finalY + 30);
+        doc.line(20, 35, 190, 35); doc.setFontSize(11);
+        doc.text(`Receipt: ${rcp} | Ref: ${ref}`, 20, 45); doc.text(`Date: ${formatPdfDate(new Date().toISOString())}`, 150, 45);
+        doc.text(`Received from: ${party}`, 20, 62);
+        doc.autoTable({ startY: 70, head: [['Description', 'Amount Paid']], body: [['Settlement against outstanding balance', "Rs " + amt.toFixed(2)]], theme: 'grid', headStyles: {fillColor:[25, 135, 84]} });
+        doc.setFontSize(12); doc.setFont(undefined, 'bold'); doc.text(`Remaining Balance: Rs ${rem.toFixed(2)}`, 20, doc.lastAutoTable.finalY + 15);
+        doc.setFontSize(11); doc.setFont(undefined, 'bold'); doc.text("Authorized Signatory", 145, doc.internal.pageSize.height - 25);
         doc.save(`${rcp}_Receipt.pdf`);
     }
 
-    window.saveProduct = async () => {
-        const n = document.getElementById('pName').value, s = parseFloat(document.getElementById('pSale').value), w = parseFloat(document.getElementById('pWhole').value), p = parseFloat(document.getElementById('pPurch').value), q = parseFloat(document.getElementById('pStock').value);
-        if(!n || !s) return;
-        await addDoc(productsCol, { name: n, salePrice: s, wholePrice: w, purchPrice: p, stock: q });
-        bootstrap.Modal.getInstance(document.getElementById('productModal')).hide();
-    };
-
     window.processPurchase = async () => {
         const id = document.getElementById('purchaseItem').value, qty = parseFloat(document.getElementById('purchaseQty').value);
-        if(!id || !qty) return;
+        if(!id || qty <= 0) return alert("Select product and qty");
         await updateDoc(doc(db, "products", id), { stock: products.find(x => x.id === id).stock + qty });
-        alert("Inventory Updated");
+        document.getElementById('purchaseQty').value = ''; alert("Stock Updated");
     };
 
-    window.sortTable = (tableId, n) => {
-        var table = document.getElementById(tableId), rows = table.rows, switching = true, dir = "asc", switchcount = 0;
-        while (switching) {
-            switching = false;
-            for (var i = 1; i < (rows.length - 1); i++) {
-                var x = rows[i].getElementsByTagName("TD")[n], y = rows[i + 1].getElementsByTagName("TD")[n], shouldSwitch = false;
-                if (dir == "asc" ? x.innerText.toLowerCase() > y.innerText.toLowerCase() : x.innerText.toLowerCase() < y.innerText.toLowerCase()) { shouldSwitch = true; break; }
-            }
-            if (shouldSwitch) { rows[i].parentNode.insertBefore(rows[i + 1], rows[i]); switching = true; switchcount++; }
-            else if (switchcount == 0 && dir == "asc") { dir = "desc"; switching = true; }
-        }
-    };
-    
-    window.printStatement = (n, b, p, bal) => { 
+    window.printSummaryReport = () => {
         const { jsPDF } = window.jspdf; const doc = new jsPDF();
-        if (logoData) doc.addImage(logoData, 'PNG', 15, 8, 25, 25);
-        doc.setFontSize(22); doc.text("DARSHAN ENTERPRISE", 105, 18, { align: "center" });
-        doc.setFontSize(14); doc.text("ACCOUNT STATEMENT", 105, 30, { align: "center" });
-        doc.autoTable({ startY: 55, head: [['Summary', 'Amount']], body: [['Billed', b],['Settled', p],['Balance', bal]], theme: 'grid' });
-        doc.save(`${n}_Statement.pdf`);
+        const ds = document.getElementById('daySales').innerText, dp = document.getElementById('dayProfit').innerText, ms = document.getElementById('monthSales').innerText, mp = document.getElementById('monthProfit').innerText;
+        doc.setFontSize(18); doc.text("SALES REPORT SUMMARY", 105, 20, { align: "center" });
+        doc.autoTable({ startY: 30, head: [['Label', 'Today', 'This Month']], body: [['Revenue', ds, ms],['Net Profit', dp, mp]], theme: 'striped' });
+        doc.save(`Sales_Report.pdf`);
     };
 
-    window.removeFromCart = (i) => { cart.splice(i, 1); updateCartUI(); };
     window.deleteProduct = async (id) => { if(confirm("Remove?")) await deleteDoc(doc(db, "products", id)); };
-    window.handleLogout = () => { sessionStorage.clear(); location.reload(); };
-    window.masterReset = async () => { if(prompt("Type 'DADA' to wipe data:") === 'DADA'){ const pS = await getDocs(productsCol), tS = await getDocs(transactionsCol); const b = writeBatch(db); pS.forEach(d => b.delete(d.ref)); tS.forEach(d => b.delete(d.ref)); await b.commit(); location.reload(); } };
+    window.downloadBackup = () => { let csv = "Ref,Date,Party,Total,Paid,Balance\n"; transactions.filter(t => t.type === 'SALE').forEach(t => { csv += `${t.invoiceNo},${t.date},${t.partyName},${t.grandTotal},${t.paidAmount},${t.balance}\n`; }); const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'})); a.download = 'Backup.csv'; a.click(); };
+    window.masterReset = async () => { 
+        if(prompt("Type 'DADA' to wipe all data:") === 'DADA'){ 
+            const batch = writeBatch(db); 
+            const pS = await getDocs(productsCol), tS = await getDocs(transactionsCol); 
+            pS.forEach(d => batch.delete(d.ref)); tS.forEach(d => batch.delete(d.ref)); 
+            await batch.commit(); location.reload(); 
+        } 
+    };
 </script>
 </body>
 </html>
