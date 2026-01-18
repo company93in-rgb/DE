@@ -10,11 +10,87 @@
 </head>
 <body oncontextmenu="return false;">
 
-<div id="login-screen">
-    <div style="background:#111; padding:40px; border-radius:15px; border:1px solid #333; width:350px; text-align:center;">
-        <h3 style="color:#0d6efd; font-weight:bold; margin-bottom:20px;">DARSHAN ENTERPRISE</h3>
-        <input type="password" id="pass-input" class="form-control mb-3" placeholder="Enter Dashboard PIN" style="text-align:center;">
-        <button onclick="checkAccess()" class="btn btn-primary w-100 fw-bold">Login to System</button>
+<div id="login-screen" style="
+    min-height: 100vh; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1600'); 
+    background-size: cover; 
+    background-position: center;
+">
+    <div style="
+        background: rgba(15, 15, 15, 0.7);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 60px 45px;
+        border-radius: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        width: 400px;
+        text-align: center;
+        box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+    ">
+        
+        <div style="margin-bottom: 40px;">
+            <h3 style="
+                color: #ffffff;
+                font-weight: 200;
+                letter-spacing: 6px;
+                font-size: 1.2rem;
+                margin: 0;
+                text-transform: uppercase;
+            ">
+                DARSHAN <span style="font-weight: 700; color: #0d6efd;">ENTERPRISE</span>
+            </h3>
+            <div class="brand-line"></div>
+        </div>
+
+        <div style="margin-bottom: 25px;">
+            <label style="display:block; color: rgba(255,255,255,0.5); font-size: 10px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Security Verification</label>
+            <input type="password" id="pass-input" placeholder="••••" style="
+                width: 100%;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 12px;
+                padding: 16px;
+                color: #fff;
+                text-align: center;
+                font-size: 20px;
+                letter-spacing: 8px;
+                outline: none;
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            " onfocus="this.style.borderColor='#0d6efd'; this.style.background='rgba(13, 110, 253, 0.05)';" 
+               onblur="this.style.borderColor='rgba(255, 255, 255, 0.1)'; this.style.background='rgba(255, 255, 255, 0.05)';"
+            >
+        </div>
+
+        <button onclick="checkAccess()" style="
+            width: 100%;
+            padding: 16px;
+            background: #0d6efd;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 12px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(13, 110, 253, 0.3);
+            transition: all 0.3s ease;
+        " onmouseover="this.style.background='#1a7fff'; this.style.boxShadow='0 15px 30px rgba(13, 110, 253, 0.4)';" 
+           onmouseout="this.style.background='#0d6efd';"
+        >
+            Access Dashboard
+        </button>
+
+        <div style="margin-top: 35px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
+            <p style="font-size: 10px; color: rgba(255,255,255,0.3); margin: 0; letter-spacing: 1px;">
+                ENCRYPTED WORKSTATION B-4
+            </p>
+        </div>
     </div>
 </div>
 
@@ -432,4 +508,5 @@
 </script>
 </body>
 </html>
+
 
