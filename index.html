@@ -1,514 +1,493 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Darshan Enterprise | Management System</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="index.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Darshan Enterprises - Quotation</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    body {
+      background-color: #525659;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
+    .page-container {
+      width: 210mm;
+      min-height: 297mm;
+      background: #ffffff;
+      padding: 18mm 20mm 20mm 20mm;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    .action-toolbar {
+      width: 210mm;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+    .btn {
+      padding: 9px 18px;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .btn-add { background: #16a34a; color: white; }
+    .btn-add:hover { background: #15803d; }
+    .btn-print { background: #2563eb; color: white; }
+    .btn-print:hover { background: #1d4ed8; }
+    .btn-del {
+      background: #dc2626;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      padding: 2px 7px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    input {
+      border: 1px solid transparent;
+      outline: none;
+      font-family: inherit;
+      font-size: inherit;
+      background: transparent;
+      width: 100%;
+      padding: 2px;
+    }
+    input:focus {
+      border-bottom: 1px dashed #2563eb;
+      background-color: #f8fafc;
+    }
+
+    .header-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+    .logo-box {
+      border: 1.5px solid #000;
+      width: 65px;
+      height: 65px;
+      display: inline-flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .logo-de {
+      font-family: 'Times New Roman', serif;
+      font-size: 34px;
+      line-height: 28px;
+      font-weight: bold;
+      letter-spacing: -2px;
+    }
+    .logo-sub {
+      font-size: 6px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+      text-transform: uppercase;
+    }
+    .company-name {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+    .address-line {
+      font-size: 12px;
+      font-weight: bold;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: bold;
+      margin-top: 15px;
+      line-height: 1.6;
+    }
+    .email-link {
+      color: #0000ee;
+      text-decoration: underline;
+    }
+    .right-info {
+      text-align: right;
+    }
+    .date-wrapper {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 4px;
+    }
+    .date-input {
+      width: 110px;
+      font-weight: bold;
+      text-align: right;
+    }
+
+    .to-section {
+      margin: 25px 0 15px 0;
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    .quote-heading {
+      text-align: center;
+      font-size: 15px;
+      font-weight: bold;
+      letter-spacing: 1.5px;
+      margin: 15px 0 10px 0;
+    }
+
+    .quotation-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1.5px solid #000;
+      margin-bottom: 25px;
+      table-layout: fixed;
+    }
+    .quotation-table th {
+      border: 1.5px solid #000;
+      padding: 6px 2px;
+      font-size: 11px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .quotation-table td {
+      border-left: 1.5px solid #000;
+      border-right: 1.5px solid #000;
+      border-bottom: 1.5px solid #000;
+      padding: 6px 3px;
+      font-size: 11.5px;
+      height: 38px;
+      word-break: break-word;
+    }
+
+    .col-sl { width: 5%; text-align: center; }
+    .col-particular { width: 33%; }
+    .col-mrp { width: 12%; text-align: center; }
+    .col-qly { width: 6%; text-align: center; }
+    .col-total { width: 11%; text-align: center; }
+    .col-cgst { width: 10%; text-align: center; }
+    .col-sgst { width: 10%; text-align: center; }
+    .col-gtotal { width: 11%; text-align: center; }
+    .col-action { width: 32px; text-align: center; border: none !important; }
+
+    .mrp-input {
+      text-align: center;
+      width: 100%;
+      padding: 0;
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+    .mrp-input::-webkit-outer-spin-button,
+    .mrp-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .qly-input {
+      text-align: center;
+      width: 100%;
+      padding: 0;
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+    .qly-input::-webkit-outer-spin-button,
+    .qly-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .empty-placeholder {
+      text-align: center;
+      color: #777;
+      font-style: italic;
+      padding: 18px 0;
+    }
+
+    .footer-grid {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 15px;
+      font-size: 12px;
+    }
+    .bank-title {
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+    .bank-row {
+      font-weight: bold;
+      margin-bottom: 3px;
+    }
+    .bank-label {
+      display: inline-block;
+      width: 130px;
+    }
+    .signature-box {
+      font-weight: bold;
+      font-size: 13px;
+      padding-right: 35px;
+    }
+
+    .terms-box {
+      margin-top: 25px;
+      font-size: 10px;
+      line-height: 1.45;
+    }
+    .terms-box strong {
+      font-size: 10.5px;
+    }
+
+    @media print {
+      body {
+        background: transparent;
+        padding: 0;
+        margin: 0;
+      }
+      .page-container {
+        box-shadow: none;
+        padding: 10mm 15mm;
+        width: 100%;
+        min-height: auto;
+      }
+      .no-print, .col-action {
+        display: none !important;
+      }
+      input {
+        border: none !important;
+        background: transparent !important;
+      }
+    }
+  </style>
 </head>
-<body oncontextmenu="return false;">
+<body>
 
-<div id="login-screen" style="
-    min-height: 100vh; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    font-family: 'Inter', sans-serif;
-    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
-                url('LOGIN.jpg'); 
-    background-size: cover; 
-    background-position: center;
-">
-    <div style="
-        background: rgba(15, 15, 15, 0.7);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        padding: 60px 45px;
-        border-radius: 30px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        width: 400px;
-        text-align: center;
-        box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
-    ">
-        
-        <div style="margin-bottom: 40px;">
-            <h3 style="
-                color: #ffffff;
-                font-weight: 200;
-                letter-spacing: 6px;
-                font-size: 1.2rem;
-                margin: 0;
-                text-transform: uppercase;
-            ">
-                DARSHAN <span style="font-weight: 700; color: #0d6efd;">ENTERPRISE</span>
-            </h3>
-            <div class="brand-line"></div>
-        </div>
+  <div class="action-toolbar no-print">
+    <button class="btn btn-add" onclick="addRow()">+ Add Product</button>
+    <button class="btn btn-print" onclick="handlePrint()">Print / Save as PDF</button>
+  </div>
 
-        <div style="margin-bottom: 25px;">
-            <label style="display:block; color: rgba(255,255,255,0.5); font-size: 10px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Security Verification</label>
-            <input type="password" id="pass-input" placeholder="••••" style="
-                width: 100%;
-                background: rgba(255, 255, 255, 0.05);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                border-radius: 12px;
-                padding: 16px;
-                color: #fff;
-                text-align: center;
-                font-size: 20px;
-                letter-spacing: 8px;
-                outline: none;
-                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            " onfocus="this.style.borderColor='#0d6efd'; this.style.background='rgba(13, 110, 253, 0.05)';" 
-               onblur="this.style.borderColor='rgba(255, 255, 255, 0.1)'; this.style.background='rgba(255, 255, 255, 0.05)';"
-            >
-        </div>
+  <div class="page-container">
+    
+    <table class="header-table">
+      <tr>
+        <td style="width: 80px; vertical-align: top;">
+          <div class="logo-box">
+            <div class="logo-de">DE</div>
+            <div class="logo-sub">Darshan Enterprise</div>
+          </div>
+        </td>
+        <td style="vertical-align: top;">
+          <div class="company-name">DARSHAN ENTERPRISES</div>
+          <div class="address-line">KSHETRAPAL TEMPLE, SADASHIVGAD</div>
+          <div class="address-line">KARWAR (581352)</div>
+        </td>
+      </tr>
+    </table>
 
-        <button onclick="checkAccess()" style="
-            width: 100%;
-            padding: 16px;
-            background: #0d6efd;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 12px;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(13, 110, 253, 0.3);
-            transition: all 0.3s ease;
-        " onmouseover="this.style.background='#1a7fff'; this.style.boxShadow='0 15px 30px rgba(13, 110, 253, 0.4)';" 
-           onmouseout="this.style.background='#0d6efd';"
-        >
-            Access Dashboard
-        </button>
-
-        <div style="margin-top: 35px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
-            <p style="font-size: 10px; color: rgba(255,255,255,0.3); margin: 0; letter-spacing: 1px;">
-                ENCRYPTED WORKSTATION B-4
-            </p>
-        </div>
+    <div class="meta-row">
+      <div>
+        <span>Gmail: </span><span class="email-link">darshan.raikar325@gmail.com</span>
+      </div>
+      <div class="right-info">
+        PH: 9008233193
+      </div>
     </div>
-</div>
-
-<div class="container-fluid">
-    <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-black sidebar vh-100 border-end border-secondary p-4 pt-5">
-            <div class="text-center mb-5">
-                <h4 class="fw-bold text-primary">Darshan Enterprise</h4>
-                <small class="fw-bold text-danger">Inventory & Sales</small>
-            </div>
-            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist">
-                <button class="nav-link active text-start" data-bs-toggle="pill" data-bs-target="#tab-inventory">📦 Inventory</button>
-                <button class="nav-link text-start" data-bs-toggle="pill" data-bs-target="#tab-sales">💰 Sales (Billing)</button>
-                <button class="nav-link text-start" data-bs-toggle="pill" data-bs-target="#tab-ledger">📒 Customer Ledger</button>
-                <button class="nav-link text-start" data-bs-toggle="pill" data-bs-target="#tab-history">🕒 Trans. History</button>
-                <button class="nav-link text-start" data-bs-toggle="pill" data-bs-target="#tab-purchase">🛒 Purchase (In)</button>
-                <div class="mt-5 border-top border-secondary pt-3">
-                    <button onclick="downloadBackup()" class="btn btn-outline-success btn-sm w-100 mb-2">📥 Download CSV</button>
-                    <button onclick="masterReset()" class="btn btn-danger btn-sm w-100 mb-2">🔥 Master Reset</button>
-                    <button onclick="handleLogout()" class="btn btn-outline-secondary btn-sm w-100">🚪 Logout</button>
-                </div>
-            </div>
-        </nav>
-
-        <main class="col-md-10 px-md-4 py-4">
-            <div class="row g-4 mb-4">
-                <div class="col-md-3"><div class="card p-3 border-start border-4 border-warning"><div class="text-warning small">TOTAL REVENUE</div><div class="stat-value" id="statRevenue">₹0.00</div></div></div>
-                <div class="col-md-3"><div class="card p-3 border-start border-4 border-info"><div class="text-info small">STOCK VALUE</div><div class="stat-value" id="statInvValue">₹0.00</div></div></div>
-                <div class="col-md-3"><div class="card p-3 border-start border-4 border-danger"><div class="text-danger small">OUTSTANDING</div><div class="stat-value text-danger" id="statOutstanding">₹0.00</div></div></div>
-                <div class="col-md-3"><div class="card p-3 border-start border-4 border-success"><div class="text-success small">TOTAL PROFIT</div><div class="stat-value text-success" id="statProfit">₹0.00</div></div></div>
-            </div>
-
-            <div class="tab-content">
-                <div class="tab-pane fade show active" id="tab-inventory">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h3>Stock Registry</h3>
-                        <div class="d-flex gap-2">
-                            <input type="text" id="inventorySearch" class="form-control search-box mb-0" placeholder="Search product..." onkeyup="renderUI()">
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal">ADD</button>
-                        </div>
-                    </div>
-                    <div class="card p-3"><table class="table text-center"><thead><tr><th>Product</th><th>Stock</th><th>Sale Price</th><th>Purch. Price</th><th>Action</th></tr></thead><tbody id="inventoryList"></tbody></table></div>
-                </div>
-
-                <div class="tab-pane fade" id="tab-sales">
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-12">
-                            <div class="card p-3">
-                                <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <h6 class="text-primary fw-bold">Sales Analysis Summary</h6>
-                                    <button onclick="printSummaryReport()" class="btn btn-outline-info btn-sm">🖨️ Print Report</button>
-                                </div>
-                                <div class="d-flex flex-wrap gap-3">
-                                    <div class="summary-badge"><small class="text-warning d-block">TODAY'S SALES</small><span class="fw-bold text-info" id="daySales">₹0.00</span></div>
-                                    <div class="summary-badge"><small class="text-warning d-block">TODAY'S PROFIT</small><span class="fw-bold text-success" id="dayProfit">₹0.00</span></div>
-                                    <div class="summary-badge"><small class="text-warning d-block">MONTHLY SALES</small><span class="fw-bold text-info" id="monthSales">₹0.00</span></div>
-                                    <div class="summary-badge"><small class="text-warning d-block">MONTHLY PROFIT</small><span class="fw-bold text-success" id="monthProfit">₹0.00</span></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-5">
-                            <div class="card p-4">
-                                <h5 class="fw-bold text-primary mb-3">Billing Section</h5>
-                                <div class="mb-3">
-                                    <label class="small text-info d-block">Invoice No.</label>
-                                    <span id="nextSerialNo" class="badge bg-primary fs-6">INV-0001</span>
-                                    <button id="cancelEditBtn" class="btn btn-link btn-sm text-danger d-none" onclick="cancelEditMode()">Cancel Edit</button>
-                                </div>
-                                <input type="text" id="saleParty" class="form-control mb-2" placeholder="Customer Name *">
-                                <input type="text" id="salePhone" class="form-control mb-2" placeholder="Contact Number *">
-                                <input type="email" id="saleEmail" class="form-control mb-2" placeholder="Email ID">
-                                <input type="date" id="saleDate" class="form-control mb-3">
-                                <hr class="border-secondary">
-                                <select id="saleItem" class="form-select mb-2"></select>
-                                <div class="row g-2 mb-3">
-                                    <div class="col-6"><input type="number" id="saleQty" class="form-control" placeholder="Quantity (+/-)"></div>
-                                    <div class="col-6"><input type="number" id="saleGst" class="form-control" value="18" placeholder="GST %"></div>
-                                </div>
-                                <button onclick="addToCart()" class="btn btn-outline-primary w-100 mb-3">+ Add/Update List</button>
-                                <label class="small text-info">Amount Paid (₹)</label>
-                                <input type="number" id="salePaidAmount" class="form-control mb-2" placeholder="Amount Paid by Customer">
-                            </div>
-                        </div>
-                        <div class="col-md-7">
-                            <div class="card p-4 h-100">
-                                <h5 class="fw-bold mb-3">Invoice Cart</h5>
-                                <div id="cartDisplay" class="flex-grow-1" style="min-height: 250px;"><p class="text-success text-center mt-5">No items added to cart</p></div>
-                                <div class="border-top border-secondary pt-3 mt-3">
-                                    <div class="d-flex justify-content-between mb-3"><h3>Total: <span id="cartTotalDisplay">₹0.00</span></h3></div>
-                                    <button id="saveSaleBtn" onclick="finalizeSale()" class="btn btn-success w-100 py-3 fw-bold">Finalize Sale & Generate PDF</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-pane fade" id="tab-ledger">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h3>Customer Ledger</h3>
-                        <input type="text" id="ledgerSearch" class="form-control search-box" placeholder="Search customer..." onkeyup="renderUI()">
-                    </div>
-                    <div class="card p-3"><table class="table text-center"><thead><tr><th>Customer Name</th><th>Total Billed</th><th>Total Paid</th><th>Outstanding</th><th>Action</th></tr></thead><tbody id="ledgerList"></tbody></table></div>
-                </div>
-
-                <div class="tab-pane fade" id="tab-history">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h3>Transaction History</h3>
-                        <input type="text" id="historySearch" class="form-control search-box" placeholder="Search Inv/Name..." onkeyup="renderUI()">
-                    </div>
-                    <div class="card p-3"><table class="table text-center"><thead><tr><th>Inv/Receipt</th><th>Date</th><th>Party Name</th><th>Total</th><th>Paid</th><th>Action</th></tr></thead><tbody id="historyList"></tbody></table></div>
-                </div>
-
-                <div class="tab-pane fade" id="tab-purchase">
-                    <div class="card p-4 w-50 mx-auto">
-                        <h5>Quick Inward (Update Stock)</h5>
-                        <select id="purchaseItem" class="form-select mb-2"></select>
-                        <input type="number" id="purchaseQty" class="form-control mb-2" placeholder="Qty Added">
-                        <button onclick="processPurchase()" class="btn btn-primary w-100">Update Inventory</button>
-                    </div>
-                </div>
-            </div>
-        </main>
+    <div class="meta-row" style="margin-top: 2px;">
+      <div>GSTIN: 29AMJPR9814J1Z9</div>
+      <div class="date-wrapper">
+        <span>DATE:</span>
+        <input type="text" id="quote-date" class="date-input">
+      </div>
     </div>
-</div>
 
-<div class="modal fade" id="productModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content bg-dark border-secondary"><div class="modal-body p-4">
-    <h5 class="mb-3">Register New Product</h5>
-    <input type="text" id="pName" class="form-control mb-2" placeholder="Product Name (Exact matching for DVR/Model)">
-    <div class="row g-2 mb-2"><div class="col"><input type="number" id="pSale" class="form-control" placeholder="Selling Rate"></div><div class="col"><input type="number" id="pPurch" class="form-control" placeholder="Purchase Rate"></div></div>
-    <input type="number" id="pStock" class="form-control mb-3" placeholder="Current Stock Qty">
-    <button onclick="saveProduct()" class="btn btn-primary w-100">Sync to Cloud Inventory</button>
-</div></div></div></div>
+    <div class="to-section">
+      To, <input type="text" placeholder="Enter Customer / Client Name or Company" style="width: 90%; font-weight: normal; border-bottom: 1px dashed #ccc;">
+    </div>
 
-<div class="modal fade" id="payModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content bg-dark border-secondary"><div class="modal-body p-4 text-center">
-    <h5 class="mb-3 text-success">Receive Payment</h5>
-    <p id="payPartyDisplay" class="fw-bold"></p>
-    <p id="payInvDisplay" class="small text-muted"></p>
-    <input type="number" id="receivePayAmount" class="form-control mb-3 text-center" placeholder="Amount Received">
-    <button onclick="submitPayment()" class="btn btn-success w-100 fw-bold">Confirm & Generate Receipt</button>
-</div></div></div></div>
+    <div class="quote-heading">QUOTATION</div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="hide.js"></script>
-<script src="config1.js"></script>
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, query, orderBy, writeBatch, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-  
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const productsCol = collection(db, "products");
-    const transactionsCol = collection(db, "transactions");
+    <table class="quotation-table" id="quote-table">
+      <thead>
+        <tr>
+          <th class="col-sl">SL</th>
+          <th class="col-particular">PARTICOULAR</th>
+          <th class="col-mrp">MRP</th>
+          <th class="col-qly">QLY</th>
+          <th class="col-total">TOTAL</th>
+          <th class="col-cgst">CGST (9%)</th>
+          <th class="col-sgst">SGST (9%)</th>
+          <th class="col-gtotal">G.TOTAL</th>
+          <th class="col-action no-print"></th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        <tr id="empty-row" class="no-print">
+          <td colspan="9" class="empty-placeholder">No items added yet. Click "+ Add Product" to add line items.</td>
+        </tr>
+      </tbody>
+    </table>
 
-    let logoData = null;
-    const logoUrl = "https://raw.githubusercontent.com/company93in-rgb/DE/refs/heads/main/LOGO.png";
+    <div class="footer-grid">
+      <div>
+        <div class="bank-title">Bank of Baroda</div>
+        <div class="bank-row"><span class="bank-label">ACCOUNT NAME :</span> DARSHAN ENTERPRISES</div>
+        <div class="bank-row"><span class="bank-label">ACCOUNT NO :</span> 64540200001518</div>
+        <div class="bank-row"><span class="bank-label">IFSC CODE :</span> BARB0VJKAWR</div>
+      </div>
+      <div class="signature-box">
+        SIGNATURE
+      </div>
+    </div>
 
-    function preloadLogo() {
-        const img = new Image(); img.crossOrigin = "anonymous"; 
-        img.onload = function() { const canvas = document.createElement("canvas"); canvas.width = this.width; canvas.height = this.height; const ctx = canvas.getContext("2d"); ctx.drawImage(this, 0, 0); logoData = canvas.toDataURL("image/png"); };
-        img.src = logoUrl;
-    }
-    preloadLogo();
+    <div class="terms-box">
+      <strong>Terms & Conditions::</strong><br>
+      <strong>Validity:</strong> This offer is valid for 10 days only.<br>
+      <strong>Delivery:</strong> Ex-Stock, subject to availability, if not in stock, will be delivered in10-15 Days.<br>
+      <strong>Payment:</strong> 50% advance & 50% on delivery & completion of the Job.<br>
+      <strong>Warranty:</strong> We offer warranty of 1 year, commencing from the date of Installation. Any misuse or improper handling of the equipment resulting in damage and Force Majeure conditions like Earthquakes, Floods, Lightening and High Voltage etc. will automatically render this warranty void
+    </div>
 
-    let products = [], transactions = [], cart = [], existingParties = new Set();
-    let activePayParty = "", activeCurrentBalance = 0;
-    let editMode = false, editTransactionId = null;
+  </div>
 
-    function formatPdfDate(dateStr) {
-        const d = new Date(dateStr);
-        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        return `${String(d.getDate()).padStart(2, '0')}-${months[d.getMonth()]}-${d.getFullYear()}`;
-    }
-
-    window.checkAccess = () => { if(document.getElementById('pass-input').value === "DADA") { document.getElementById('login-screen').style.display = 'none'; sessionStorage.setItem('isAuth', 'true'); } else alert("Wrong PIN"); };
-    window.handleLogout = () => { sessionStorage.clear(); location.reload(); };
-    if(sessionStorage.getItem('isAuth')) document.getElementById('login-screen').style.display = 'none';
-
-    onSnapshot(productsCol, snap => { products = snap.docs.map(d => ({id: d.id, ...d.data()})); renderUI(); });
-    onSnapshot(query(transactionsCol, orderBy("timestamp", "desc")), snap => { 
-        transactions = snap.docs.map(d => ({id: d.id, ...d.data()})); 
-        existingParties = new Set(transactions.map(t => t.partyName));
-        renderUI(); 
-    });
-
-    window.renderUI = () => {
-        const today = new Date().toISOString().split('T')[0];
-        const thisMonth = today.substring(0, 7);
-        if(!document.getElementById('saleDate').value) document.getElementById('saleDate').value = today;
-        
-        const allSales = transactions.filter(t => t.type === 'SALE');
-        const todaySales = allSales.filter(s => s.date === today);
-        const monthSalesList = allSales.filter(s => s.date.startsWith(thisMonth));
-        
-        document.getElementById('daySales').innerText = `₹${todaySales.reduce((a,b) => a + (b.grandTotal || 0), 0).toFixed(2)}`;
-        document.getElementById('dayProfit').innerText = `₹${todaySales.reduce((a,b) => a + (b.totalProfit || 0), 0).toFixed(2)}`;
-        document.getElementById('monthSales').innerText = `₹${monthSalesList.reduce((a,b) => a + (b.grandTotal || 0), 0).toFixed(2)}`;
-        document.getElementById('monthProfit').innerText = `₹${monthSalesList.reduce((a,b) => a + (b.totalProfit || 0), 0).toFixed(2)}`;
-
-        document.getElementById('statRevenue').innerText = `₹${allSales.reduce((a,b) => a + (b.grandTotal || 0), 0).toLocaleString()}`;
-        document.getElementById('statProfit').innerText = `₹${allSales.reduce((a,b) => a + (b.totalProfit || 0), 0).toLocaleString()}`;
-        document.getElementById('statOutstanding').innerText = `₹${allSales.reduce((a,b) => a + (b.balance || 0), 0).toLocaleString()}`;
-        document.getElementById('statInvValue').innerText = `₹${products.reduce((a,b) => a + ((b.stock || 0) * (b.purchPrice || 0)), 0).toLocaleString()}`;
-        
-        if(!editMode) {
-            const actualInv = allSales.filter(s => s.invoiceNo && s.invoiceNo.startsWith("INV-"));
-            document.getElementById('nextSerialNo').innerText = "INV-" + String(actualInv.length + 1).padStart(4, '0');
-        }
-
-        const opts = products.map(p => `<option value="${p.id}">${p.name} (Stock: ${p.stock})</option>`).join('');
-        document.getElementById('saleItem').innerHTML = opts; document.getElementById('purchaseItem').innerHTML = opts;
-
-        const invQuery = (document.getElementById('inventorySearch').value || "").toLowerCase();
-        document.getElementById('inventoryList').innerHTML = products.filter(p => p.name.toLowerCase().includes(invQuery)).map(p => `<tr><td>${p.name}</td><td>${p.stock}</td><td>₹${p.salePrice}</td><td>₹${p.purchPrice}</td><td><button onclick="deleteProduct('${p.id}')" class="btn btn-sm btn-outline-danger">🗑️</button></td></tr>`).join('');
-
-        const ledgerQuery = (document.getElementById('ledgerSearch').value || "").toLowerCase();
-        const ledgerMap = {};
-        allSales.forEach(s => {
-            const n = s.partyName || "Cash Customer";
-            if(!ledgerMap[n]) ledgerMap[n] = { billed: 0, paid: 0, balance: 0 };
-            ledgerMap[n].billed += (s.grandTotal || 0); ledgerMap[n].paid += (s.paidAmount || 0); ledgerMap[n].balance += (s.balance || 0);
-        });
-        document.getElementById('ledgerList').innerHTML = Object.keys(ledgerMap).filter(name => name.toLowerCase().includes(ledgerQuery)).map(name => `<tr><td>${name}</td><td>₹${ledgerMap[name].billed.toFixed(2)}</td><td class="text-success">₹${ledgerMap[name].paid.toFixed(2)}</td><td class="text-danger fw-bold">₹${ledgerMap[name].balance.toFixed(2)}</td><td><button onclick="openPayModal('${name}', ${ledgerMap[name].balance})" class="btn btn-sm btn-primary">Pay Balance</button></td></tr>`).join('');
-
-        const histQuery = (document.getElementById('historySearch').value || "").toLowerCase();
-        document.getElementById('historyList').innerHTML = allSales.filter(s => (s.invoiceNo && s.invoiceNo.toLowerCase().includes(histQuery)) || (s.partyName && s.partyName.toLowerCase().includes(histQuery))).map(s => `<tr><td><span class="badge ${s.invoiceNo.startsWith('INV')?'bg-primary':'bg-success'}">${s.invoiceNo}</span></td><td>${s.date}</td><td>${s.partyName}</td><td>₹${(s.grandTotal || 0).toFixed(2)}</td><td class="text-info">₹${(s.paidAmount || 0).toFixed(2)}</td><td>${s.invoiceNo.startsWith('INV') ? `<button onclick="initiateEdit('${s.id}')" class="btn btn-sm btn-outline-warning">✏️ Edit</button>` : `<span class="text-muted small">Receipt</span>`}</td></tr>`).join('');
-    };
-
-    window.saveProduct = async () => {
-        const n = document.getElementById('pName').value, s = parseFloat(document.getElementById('pSale').value), p = parseFloat(document.getElementById('pPurch').value), q = parseFloat(document.getElementById('pStock').value);
-        if(!n || isNaN(s) || isNaN(p) || isNaN(q)) return alert("Fill all product details!");
-        try {
-            await addDoc(productsCol, { name: n, salePrice: s, purchPrice: p, stock: q });
-            bootstrap.Modal.getInstance(document.getElementById('productModal')).hide();
-            // Clear inputs
-            document.getElementById('pName').value = ''; document.getElementById('pSale').value = ''; document.getElementById('pPurch').value = ''; document.getElementById('pStock').value = '';
-        } catch(e) { alert("Cloud Sync Failed: " + e.message); }
-    };
-
-    window.addToCart = () => {
-        const id = document.getElementById('saleItem').value, qtyIn = parseFloat(document.getElementById('saleQty').value), gstP = parseFloat(document.getElementById('saleGst').value) || 0, p = products.find(x => x.id === id);
-        if (!p || isNaN(qtyIn) || qtyIn === 0) return alert("Invalid Qty");
-        const idx = cart.findIndex(item => item.id === id);
-        if (idx > -1) {
-            const newQty = cart[idx].qty + qtyIn;
-            if (newQty < 0) return alert("Quantity cannot be negative");
-            if (p.stock < newQty) return alert("Insufficient Stock");
-            if (newQty === 0) cart.splice(idx, 1);
-            else { cart[idx].qty = newQty; cart[idx].tax = (newQty * p.salePrice) * (gstP/100); cart[idx].total = (newQty * p.salePrice) + cart[idx].tax; }
-        } else {
-            if (qtyIn < 0 || p.stock < qtyIn) return alert("Check Stock/Qty");
-            const tax = (qtyIn * p.salePrice) * (gstP/100);
-            cart.push({ id, name: p.name, qty: qtyIn, salePrice: p.salePrice, purchPrice: p.purchPrice, gstP, tax, total: (qtyIn * p.salePrice) + tax });
-        }
-        updateCartUI(); document.getElementById('saleQty').value = '';
-    };
-
-    window.initiateEdit = async (id) => {
-        if(prompt("Enter Secret Key to Edit (DADA):") !== "DADA") return alert("Wrong Key!");
-        const txn = transactions.find(t => t.id === id);
-        if(!txn) return alert("Transaction not found.");
-
-        editMode = true; editTransactionId = id;
-        document.getElementById('cancelEditBtn').classList.remove('d-none');
-        document.getElementById('saveSaleBtn').innerText = "Update & Save Invoice";
-        document.getElementById('nextSerialNo').innerText = txn.invoiceNo;
-        document.getElementById('saleParty').value = txn.partyName;
-        document.getElementById('salePhone').value = txn.partyPhone || "";
-        document.getElementById('saleEmail').value = txn.partyEmail || "";
-        document.getElementById('saleDate').value = txn.date;
-        document.getElementById('salePaidAmount').value = txn.paidAmount;
-
-        const batch = writeBatch(db);
-        txn.items.forEach(item => { const p = products.find(prod => prod.id === item.id); if(p) batch.update(doc(db, "products", item.id), { stock: p.stock + item.qty }); });
-        await batch.commit();
-
-        cart = [...txn.items]; updateCartUI();
-        const tabBtn = document.querySelector('[data-bs-target="#tab-sales"]');
-        new bootstrap.Tab(tabBtn).show();
-    };
-
-    window.finalizeSale = async () => {
-        if(cart.length === 0) return alert("Cart is empty");
-        const party = document.getElementById('saleParty').value.trim(), phone = document.getElementById('salePhone').value.trim(), invNo = document.getElementById('nextSerialNo').innerText, date = document.getElementById('saleDate').value, email = document.getElementById('saleEmail').value.trim();
-        if(!party || !phone) return alert("Name & Phone mandatory!");
-        if (!editMode && existingParties.has(party) && !confirm("Duplicate Customer Name! OK to proceed?")) return;
-
-        const total = cart.reduce((a,b) => a + b.total, 0), paid = parseFloat(document.getElementById('salePaidAmount').value) || 0;
-        try {
-            const batch = writeBatch(db);
-            cart.forEach(item => { batch.update(doc(db, "products", item.id), { stock: products.find(x => x.id === item.id).stock - item.qty }); });
-            const obj = { type: 'SALE', invoiceNo: invNo, partyName: party, partyPhone: phone, partyEmail: email, date, items: cart, grandTotal: total, paidAmount: paid, balance: total - paid, totalProfit: cart.reduce((a,b) => a + ((b.salePrice - b.purchPrice) * b.qty), 0), timestamp: Date.now() };
-            if(editMode) await updateDoc(doc(db, "transactions", editTransactionId), obj);
-            else await addDoc(transactionsCol, obj);
-            await batch.commit(); generatePDF(invNo, party, phone, email, date, cart, total, paid, (total - paid)); cancelEditMode(); alert("Success!");
-        } catch(e) { alert(e.message); }
-    };
-
-    window.cancelEditMode = () => { editMode = false; editTransactionId = null; cart = []; updateCartUI(); document.getElementById('cancelEditBtn').classList.add('d-none'); document.getElementById('saveSaleBtn').innerText = "Finalize Sale & Generate PDF"; document.getElementById('saleParty').value = ''; document.getElementById('salePhone').value = ''; document.getElementById('saleEmail').value = ''; document.getElementById('salePaidAmount').value = ''; renderUI(); };
-
-    function updateCartUI() {
-        const d = document.getElementById('cartDisplay');
-        if(cart.length === 0) { d.innerHTML = `<p class="text-muted text-center mt-5">Cart is empty</p>`; return; }
-        d.innerHTML = cart.map((item, i) => `<div class="cart-item d-flex justify-content-between align-items-center"><div><b>${item.name}</b> (x${item.qty})</div><div>₹${item.total.toFixed(2)} <button onclick="removeFromCart(${i})" class="btn btn-sm text-danger">✕</button></div></div>`).join('');
-        document.getElementById('cartTotalDisplay').innerText = `₹${cart.reduce((a,b) => a + b.total, 0).toFixed(2)}`;
+  <script>
+    function setInitialDate() {
+      const today = new Date();
+      const dd = String(today.getDate()).padStart(2, '0');
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const yyyy = today.getFullYear();
+      document.getElementById('quote-date').value = `${dd}/${mm}/${yyyy}`;
     }
 
-    window.removeFromCart = (i) => { cart.splice(i, 1); updateCartUI(); };
-
-    function generatePDF(inv, party, phone, email, date, items, total, paid, bal) {
-        const { jsPDF } = window.jspdf; const doc = new jsPDF();
-        const formattedDate = formatPdfDate(date);
-        const totalTax = items.reduce((sum, item) => sum + (item.tax || 0), 0);
-        
-        if (logoData) doc.addImage(logoData, 'PNG', 15, 8, 25, 25);
-        doc.setFontSize(22); doc.setTextColor(13, 110, 253); doc.text("DARSHAN ENTERPRISE", 105, 18, { align: "center" });
-        doc.setFontSize(9); doc.setTextColor(80); doc.text("Kshetrapal Temple | Sadashivgad, Kawar - 581352", 105, 25, { align: "center" });
-        doc.setFontSize(9); doc.setTextColor(80); doc.text("Contact: +91-9008233193 | Gmail: darshan.raikar325@gmail.com", 105, 30, { align: "center" });
-        doc.line(20, 36, 190, 36); doc.setTextColor(0); doc.setFontSize(10);
-        doc.text(`Invoice: ${inv}`, 20, 42); doc.text(`Party: ${party}`, 20, 48); doc.text(`Phone: ${phone}`, 20, 54);
-        doc.text("Prop. : Darshan D Raikar", 150, 42);
-         doc.text("GSTIN : 29AMJPR9814J1Z9", 150, 47)
-        doc.text(`Date: ${formattedDate}`, 150, 52);
-        
-
-        doc.autoTable({ 
-            startY: 60, 
-            head: [['Item Name', 'Qty', 'Rate', 'GST%', 'Tax Amt', 'Total']], 
-            body: items.map(i => [i.name, i.qty, i.salePrice, i.gstP + "%", i.tax.toFixed(2), i.total.toFixed(2)]), 
-            
-            foot: [
-                ['','','','','Tax Total:', "₹" + totalTax.toFixed(2)],
-                ['','','','','Grand Total:', "₹" + total.toFixed(2)],
-                ['','','','','Amount Paid:', "₹" + paid.toFixed(2)],
-                ['','','','','Balance:', "₹" + bal.toFixed(2)]
-            ], 
-            theme: 'grid', 
-            headStyles: {fillColor:[13,110,253]}, 
-            footStyles: {fillColor:[255,255,255], textColor:0, fontStyle:'bold'} 
-        });
-
-        const fy = doc.lastAutoTable.finalY + 10;
+    function checkEmptyState() {
+      const tbody = document.getElementById('table-body');
+      const itemRows = tbody.querySelectorAll('.item-row');
+      const emptyRow = document.getElementById('empty-row');
       
-
-        doc.setFontSize(11); doc.setFont(undefined, 'bold'); doc.text("Bank Account Details:", 20, fy);
-        doc.setFontSize(10); doc.setFont(undefined, 'normal');
-        doc.text("Bank Name: Bank of Baroda", 20, fy + 7); doc.text("A/c: 64540200001518", 20, fy + 13); doc.text("IFSC: BARB0VJKARW", 20, fy + 19);
-        
-        const ty = fy + 30; doc.setFont(undefined, 'bold'); doc.text("Terms and Conditions:", 20, ty);
-        doc.setFontSize(8); doc.setFont(undefined, 'normal');
-        const terms = ["1. We are not responsible for damage during transit.","2. Goods once sold will not taken back/Exchange.","3. Warranty claims subject to manufacture terms.","4. Abuse/burn damages not covered."];
-        terms.forEach((t, i) => doc.text(t, 20, ty + 6 + (i * 5), { align: 'justify', maxWidth: 170 }));
-         doc.setFontSize(11); doc.setFont(undefined, 'bold'); doc.text("DARSHAN ENTERPRISE", 145, doc.internal.pageSize.height - 15);
-        doc.setFontSize(11); doc.setFont(undefined, 'bold'); doc.text("Authorized Signatory", 145, doc.internal.pageSize.height - 25);
-        doc.save(`${inv}.pdf`);
+      if (itemRows.length === 0) {
+        if (!emptyRow) {
+          const tr = document.createElement('tr');
+          tr.id = 'empty-row';
+          tr.className = 'no-print';
+          tr.innerHTML = `<td colspan="9" class="empty-placeholder">No items added yet. Click "+ Add Product" to add line items.</td>`;
+          tbody.appendChild(tr);
+        }
+      } else if (emptyRow) {
+        emptyRow.remove();
+      }
     }
 
-    window.openPayModal = (p, b) => { activePayParty = p; activeCurrentBalance = b; document.getElementById('payPartyDisplay').innerText = p; document.getElementById('payInvDisplay').innerText = "Outstanding Balance: ₹" + b.toFixed(2); document.getElementById('receivePayAmount').value = b.toFixed(2); new bootstrap.Modal(document.getElementById('payModal')).show(); };
-    window.submitPayment = async () => {
-        const amt = parseFloat(document.getElementById('receivePayAmount').value);
-        if(isNaN(amt) || amt <= 0) return alert("Invalid amount");
-        const rcpNo = "RCP-" + Date.now().toString().slice(-4);
-        const ref = transactions.find(t => t.partyName === activePayParty && t.invoiceNo.startsWith('INV-'))?.invoiceNo || "General Settlement";
-        try {
-            await addDoc(transactionsCol, { type: 'SALE', invoiceNo: rcpNo, partyName: activePayParty, date: new Date().toISOString().split('T')[0], grandTotal: 0, paidAmount: amt, balance: -amt, totalProfit: 0, items: [], timestamp: Date.now() });
-            bootstrap.Modal.getInstance(document.getElementById('payModal')).hide();
-            generateReceiptPDF(rcpNo, ref, activePayParty, amt, activeCurrentBalance - amt);
-            alert("Payment recorded!");
-        } catch(e) { alert(e.message); }
-    };
+    function addRow() {
+      const tbody = document.getElementById('table-body');
+      const emptyRow = document.getElementById('empty-row');
+      if (emptyRow) emptyRow.remove();
 
-    function generateReceiptPDF(rcp, ref, party, amt, rem) {
-        const { jsPDF } = window.jspdf; const doc = new jsPDF();
-        if (logoData) doc.addImage(logoData, 'PNG', 15, 8, 20, 20);
-        doc.setFontSize(22); doc.setTextColor(25, 135, 84); doc.text("DARSHAN ENTERPRISE", 105, 18, { align: "center" });
-        doc.setFontSize(14); doc.text("PAYMENT RECEIPT", 105, 30, { align: "center" });
-        doc.line(20, 35, 190, 35); doc.setFontSize(11);
-        doc.text(`Receipt: ${rcp} | Ref: ${ref}`, 20, 45); doc.text(`Date: ${formatPdfDate(new Date().toISOString())}`, 150, 45);
-        doc.text(`Received from: ${party}`, 20, 62);
-        doc.autoTable({ startY: 70, head: [['Description', 'Amount Paid']], body: [['Settlement against outstanding balance', "Rs " + amt.toFixed(2)]], theme: 'grid', headStyles: {fillColor:[25, 135, 84]} });
-        doc.setFontSize(12); doc.setFont(undefined, 'bold'); doc.text(`Remaining Balance: Rs ${rem.toFixed(2)}`, 20, doc.lastAutoTable.finalY + 15);
-        doc.setFontSize(11); doc.setFont(undefined, 'bold'); doc.text("Authorized Signatory", 145, doc.internal.pageSize.height - 25);
-        doc.save(`${rcp}_Receipt.pdf`);
+      const tr = document.createElement('tr');
+      tr.className = 'item-row';
+      tr.innerHTML = `
+        <td class="col-sl sl-number"></td>
+        <td class="col-particular">
+          <input type="text" class="particular-input" placeholder="Enter product description">
+        </td>
+        <td class="col-mrp">
+          <input type="number" class="mrp-input" placeholder="0.00" step="any" oninput="recalculateRow(this)">
+        </td>
+        <td class="col-qly">
+          <input type="number" class="qly-input" value="1" min="1" step="1" oninput="recalculateRow(this)">
+        </td>
+        <td class="col-total total-val">0.00</td>
+        <td class="col-cgst cgst-val">0.00</td>
+        <td class="col-sgst sgst-val">0.00</td>
+        <td class="col-gtotal gtotal-val">0.00</td>
+        <td class="col-action no-print">
+          <button class="btn-del" onclick="deleteRow(this)">✕</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+      renumberRows();
     }
 
-    window.processPurchase = async () => {
-        const id = document.getElementById('purchaseItem').value, qty = parseFloat(document.getElementById('purchaseQty').value);
-        if(!id || qty <= 0) return alert("Select product and qty");
-        await updateDoc(doc(db, "products", id), { stock: products.find(x => x.id === id).stock + qty });
-        document.getElementById('purchaseQty').value = ''; alert("Stock Updated");
-    };
+    function deleteRow(btn) {
+      const row = btn.closest('tr');
+      row.remove();
+      renumberRows();
+      checkEmptyState();
+    }
 
-    window.printSummaryReport = () => {
-        const { jsPDF } = window.jspdf; const doc = new jsPDF();
-        const ds = document.getElementById('daySales').innerText, dp = document.getElementById('dayProfit').innerText, ms = document.getElementById('monthSales').innerText, mp = document.getElementById('monthProfit').innerText;
-        doc.setFontSize(18); doc.text("SALES REPORT SUMMARY", 105, 20, { align: "center" });
-        doc.autoTable({ startY: 30, head: [['Label', 'Today', 'This Month']], body: [['Revenue', ds, ms],['Net Profit', dp, mp]], theme: 'striped' });
-        doc.save(`Sales_Report.pdf`);
-    };
+    function renumberRows() {
+      const rows = document.querySelectorAll('#table-body .item-row');
+      rows.forEach((row, index) => {
+        row.querySelector('.sl-number').textContent = index + 1;
+      });
+    }
 
-    window.deleteProduct = async (id) => { if(confirm("Remove?")) await deleteDoc(doc(db, "products", id)); };
-    window.downloadBackup = () => { let csv = "Ref,Date,Party,Total,Paid,Balance\n"; transactions.filter(t => t.type === 'SALE').forEach(t => { csv += `${t.invoiceNo},${t.date},${t.partyName},${t.grandTotal},${t.paidAmount},${t.balance}\n`; }); const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'})); a.download = 'Backup.csv'; a.click(); };
-    window.masterReset = async () => { 
-        if(prompt("Type 'DADA' to wipe all data:") === 'DADA'){ 
-            const batch = writeBatch(db); 
-            const pS = await getDocs(productsCol), tS = await getDocs(transactionsCol); 
-            pS.forEach(d => batch.delete(d.ref)); tS.forEach(d => batch.delete(d.ref)); 
-            await batch.commit(); location.reload(); 
-        } 
-    };
-</script>
+    /* 
+      Updated Calculation:
+      TOTAL (Taxable Base) = MRP * QLY
+      CGST (9%)            = TOTAL * 0.09
+      SGST (9%)            = TOTAL * 0.09
+      G.TOTAL              = TOTAL + CGST + SGST (TOTAL + 18%)
+    */
+    function recalculateRow(input) {
+      const row = input.closest('tr');
+      const unitMrp = parseFloat(row.querySelector('.mrp-input').value) || 0;
+      const qty = parseFloat(row.querySelector('.qly-input').value) || 0;
+
+      const baseTotal = unitMrp * qty;
+      const cgst = baseTotal * 0.09;
+      const sgst = baseTotal * 0.09;
+      const grandTotal = baseTotal + cgst + sgst;
+
+      row.querySelector('.total-val').textContent = baseTotal.toFixed(2);
+      row.querySelector('.cgst-val').textContent = cgst.toFixed(2);
+      row.querySelector('.sgst-val').textContent = sgst.toFixed(2);
+      row.querySelector('.gtotal-val').textContent = grandTotal.toFixed(2);
+    }
+
+    function handlePrint() {
+      const rows = document.querySelectorAll('#table-body .item-row');
+      
+      if (rows.length === 0) {
+        alert("Error: Need to add product before printing or saving PDF!");
+        return;
+      }
+
+      let hasValidItem = false;
+      rows.forEach(row => {
+        const itemDesc = row.querySelector('.particular-input').value.trim();
+        const mrp = parseFloat(row.querySelector('.mrp-input').value) || 0;
+        if (itemDesc !== "" || mrp > 0) {
+          hasValidItem = true;
+        }
+      });
+
+      if (!hasValidItem) {
+        alert("Error: Need to add product details (product name or price) before printing!");
+        return;
+      }
+
+      window.print();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      setInitialDate();
+    });
+  </script>
 </body>
 </html>
-
-
-
-
