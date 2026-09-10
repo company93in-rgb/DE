@@ -187,7 +187,7 @@
     .col-gtotal { width: 11%; text-align: center; }
     .col-action { width: 32px; text-align: center; border: none !important; }
 
-    .mrp-input {
+    .mrp-input, .qly-input {
       text-align: center;
       width: 100%;
       padding: 0;
@@ -195,18 +195,7 @@
       appearance: textfield;
     }
     .mrp-input::-webkit-outer-spin-button,
-    .mrp-input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
-    .qly-input {
-      text-align: center;
-      width: 100%;
-      padding: 0;
-      -moz-appearance: textfield;
-      appearance: textfield;
-    }
+    .mrp-input::-webkit-inner-spin-button,
     .qly-input::-webkit-outer-spin-button,
     .qly-input::-webkit-inner-spin-button {
       -webkit-appearance: none;
@@ -239,14 +228,28 @@
       display: inline-block;
       width: 130px;
     }
-    .signature-box {
+
+    /* Signature styling */
+    .signature-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-right: 25px;
+    }
+    .sign-image {
+      width: 120px;
+      height: auto;
+      mix-blend-mode: multiply; /* Blends white background seamlessly onto the page */
+      margin-bottom: 4px;
+    }
+    .signature-text {
       font-weight: bold;
       font-size: 13px;
-      padding-right: 35px;
+      letter-spacing: 0.5px;
     }
 
     .terms-box {
-      margin-top: 25px;
+      margin-top: 20px;
       font-size: 10px;
       line-height: 1.45;
     }
@@ -254,15 +257,20 @@
       font-size: 10.5px;
     }
 
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
     @media print {
       body {
-        background: transparent;
+        background: #ffffff;
         padding: 0;
         margin: 0;
       }
       .page-container {
         box-shadow: none;
-        padding: 10mm 15mm;
+        padding: 15mm 20mm;
         width: 100%;
         min-height: auto;
       }
@@ -351,8 +359,11 @@
         <div class="bank-row"><span class="bank-label">ACCOUNT NO :</span> 64540200001518</div>
         <div class="bank-row"><span class="bank-label">IFSC CODE :</span> BARB0VJKAWR</div>
       </div>
-      <div class="signature-box">
-        SIGNATURE
+      
+      <!-- Signature with uploaded sign image -->
+      <div class="signature-container">
+        <img class="sign-image" src="https://github.com/company93in-rgb/DE/blob/main/signation.jpeg?raw=true">
+        <span class="signature-text">SIGNATURE</span>
       </div>
     </div>
 
@@ -437,13 +448,6 @@
       });
     }
 
-    /* 
-      Updated Calculation:
-      TOTAL (Taxable Base) = MRP * QLY
-      CGST (9%)            = TOTAL * 0.09
-      SGST (9%)            = TOTAL * 0.09
-      G.TOTAL              = TOTAL + CGST + SGST (TOTAL + 18%)
-    */
     function recalculateRow(input) {
       const row = input.closest('tr');
       const unitMrp = parseFloat(row.querySelector('.mrp-input').value) || 0;
