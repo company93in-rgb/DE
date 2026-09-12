@@ -1,497 +1,506 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Darshan Enterprises - Quotation</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-    body {
-      background-color: #525659;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+<meta charset="UTF-8">
+<title>Darshan Enterprises - Quotation</title>
+<style>
+* {
+box-sizing: border-box;
+font-family: Arial, Helvetica, sans-serif;
+}
+body {
+background-color: #525659;
+margin: 0;
+padding: 20px;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
 
-    .page-container {
-      width: 210mm;
-      min-height: 297mm;
-      background: #ffffff;
-      padding: 18mm 20mm 20mm 20mm;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-      position: relative;
-    }
+.page-container {
+width: 210mm;
+min-height: 297mm;
+background: #ffffff;
+padding: 18mm 20mm 20mm 20mm;
+box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+position: relative;
+}
 
-    .action-toolbar {
-      width: 210mm;
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 15px;
-    }
-    .btn {
-      padding: 9px 18px;
-      border: none;
-      border-radius: 4px;
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .btn-add { background: #16a34a; color: white; }
-    .btn-add:hover { background: #15803d; }
-    .btn-print { background: #2563eb; color: white; }
-    .btn-print:hover { background: #1d4ed8; }
-    .btn-del {
-      background: #dc2626;
-      color: white;
-      border: none;
-      border-radius: 3px;
-      padding: 2px 7px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 12px;
-    }
+.action-toolbar {
+width: 210mm;
+display: flex;
+justify-content: space-between;
+margin-bottom: 15px;
+}
+.btn {
+padding: 9px 18px;
+border: none;
+border-radius: 4px;
+font-size: 14px;
+font-weight: bold;
+cursor: pointer;
+}
+.btn-add { background: #16a34a; color: white; }
+.btn-add:hover { background: #15803d; }
+.btn-print { background: #2563eb; color: white; }
+.btn-print:hover { background: #1d4ed8; }
+.btn-del {
+background: #dc2626;
+color: white;
+border: none;
+border-radius: 3px;
+padding: 2px 7px;
+cursor: pointer;
+font-weight: bold;
+font-size: 12px;
+}
 
-    input {
-      border: 1px solid transparent;
-      outline: none;
-      font-family: inherit;
-      font-size: inherit;
-      background: transparent;
-      width: 100%;
-      padding: 2px;
-    }
-    input:focus {
-      border-bottom: 1px dashed #2563eb;
-      background-color: #f8fafc;
-    }
+input, textarea {
+border: 1px solid transparent;
+outline: none;
+font-family: inherit;
+font-size: inherit;
+background: transparent;
+width: 100%;
+padding: 2px;
+}
+input:focus, textarea:focus {
+border-bottom: 1px dashed #2563eb;
+background-color: #f8fafc;
+}
 
-    .header-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 15px;
-    }
-    .logo-box {
-      border: 1.5px solid #000;
-      width: 65px;
-      height: 65px;
-      display: inline-flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
-    .logo-de {
-      font-family: 'Times New Roman', serif;
-      font-size: 34px;
-      line-height: 28px;
-      font-weight: bold;
-      letter-spacing: -2px;
-    }
-    .logo-sub {
-      font-size: 6px;
-      font-weight: bold;
-      letter-spacing: 0.5px;
-      margin-top: 4px;
-      text-transform: uppercase;
-    }
-    .company-name {
-      font-size: 26px;
-      font-weight: 900;
-      letter-spacing: 1px;
-      margin-bottom: 6px;
-      text-align: center;
-    }
-    .address-line {
-      font-size: 12px;
-      font-weight: bold;
-      text-align: center;
-      line-height: 1.4;
-    }
+.header-table {
+width: 100%;
+border-collapse: collapse;
+margin-bottom: 15px;
+}
+.logo-box {
+border: 1.5px solid #000;
+width: 65px;
+height: 65px;
+display: inline-flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+text-align: center;
+}
+.logo-de {
+font-family: 'Times New Roman', serif;
+font-size: 34px;
+line-height: 28px;
+font-weight: bold;
+letter-spacing: -2px;
+}
+.logo-sub {
+font-size: 6px;
+font-weight: bold;
+letter-spacing: 0.5px;
+margin-top: 4px;
+text-transform: uppercase;
+}
+.company-name {
+font-size: 26px;
+font-weight: 900;
+letter-spacing: 1px;
+margin-bottom: 6px;
+text-align: center;
+}
+.address-line {
+font-size: 12px;
+font-weight: bold;
+text-align: center;
+line-height: 1.4;
+}
 
-    .meta-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-      font-weight: bold;
-      margin-top: 15px;
-      line-height: 1.6;
-    }
-    .email-link {
-      color: #0000ee;
-      text-decoration: underline;
-    }
-    .right-info {
-      text-align: right;
-    }
-    .date-wrapper {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 4px;
-    }
-    .date-input {
-      width: 110px;
-      font-weight: bold;
-      text-align: right;
-    }
+.meta-row {
+display: flex;
+justify-content: space-between;
+font-size: 13px;
+font-weight: bold;
+margin-top: 15px;
+line-height: 1.6;
+}
+.email-link {
+color: #0000ee;
+text-decoration: underline;
+}
+.right-info {
+text-align: right;
+}
+.date-wrapper {
+display: flex;
+justify-content: flex-end;
+align-items: center;
+gap: 4px;
+}
+.date-input {
+width: 110px;
+font-weight: bold;
+text-align: right;
+}
 
-    .to-section {
-      margin: 25px 0 15px 0;
-      font-size: 15px;
-      font-weight: bold;
-    }
+.to-section {
+margin: 25px 0 15px 0;
+font-size: 15px;
+font-weight: bold;
+}
 
-    .quote-heading {
-      text-align: center;
-      font-size: 15px;
-      font-weight: bold;
-      letter-spacing: 1.5px;
-      margin: 15px 0 10px 0;
-    }
+.quote-heading {
+text-align: center;
+font-size: 15px;
+font-weight: bold;
+letter-spacing: 1.5px;
+margin: 15px 0 10px 0;
+}
 
-    .quotation-table {
-      width: 100%;
-      border-collapse: collapse;
-      border: 1.5px solid #000;
-      margin-bottom: 25px;
-      table-layout: fixed;
-    }
-    .quotation-table th {
-      border: 1.5px solid #000;
-      padding: 6px 2px;
-      font-size: 11px;
-      font-weight: bold;
-      text-align: center;
-    }
-    .quotation-table td {
-      border-left: 1.5px solid #000;
-      border-right: 1.5px solid #000;
-      border-bottom: 1.5px solid #000;
-      padding: 6px 3px;
-      font-size: 11.5px;
-      height: 38px;
-      word-break: break-word;
-    }
+.quotation-table {
+width: 100%;
+border-collapse: collapse;
+border: 1.5px solid #000;
+margin-bottom: 25px;
+table-layout: fixed;
+}
+.quotation-table th {
+border: 1.5px solid #000;
+padding: 6px 2px;
+font-size: 11px;
+font-weight: bold;
+text-align: center;
+}
+.quotation-table td {
+border-left: 1.5px solid #000;
+border-right: 1.5px solid #000;
+border-bottom: 1.5px solid #000;
+padding: 6px 3px;
+font-size: 11.5px;
+height: 38px;
+vertical-align: middle;
+word-break: break-word;
+}
 
-    .col-sl { width: 5%; text-align: center; }
-    .col-particular { width: 33%; }
-    .col-mrp { width: 12%; text-align: center; }
-    .col-qly { width: 6%; text-align: center; }
-    .col-total { width: 11%; text-align: center; }
-    .col-cgst { width: 10%; text-align: center; }
-    .col-sgst { width: 10%; text-align: center; }
-    .col-gtotal { width: 11%; text-align: center; }
-    .col-action { width: 32px; text-align: center; border: none !important; }
+/* Column Widths */
+.col-sl { width: 5%; text-align: center; }
+.col-particular { width: 34%; }
+.col-mrp { width: 12%; text-align: center; }
+.col-qly { width: 6%; text-align: center; }
+.col-total { width: 11%; text-align: center; }
+.col-cgst { width: 10%; text-align: center; }
+.col-sgst { width: 10%; text-align: center; }
+.col-gtotal { width: 11%; text-align: center; }
+.col-action { width: 32px; text-align: center; border: none !important; }
 
-    .mrp-input, .qly-input {
-      text-align: center;
-      width: 100%;
-      padding: 0;
-      -moz-appearance: textfield;
-      appearance: textfield;
-    }
-    .mrp-input::-webkit-outer-spin-button,
-    .mrp-input::-webkit-inner-spin-button,
-    .qly-input::-webkit-outer-spin-button,
-    .qly-input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
+/* Textarea styling for complete text visibility and wrapping */
+.particular-textarea {
+width: 100%;
+resize: none;
+overflow: hidden;
+display: block;
+line-height: 1.35;
+font-size: 11.5px;
+white-space: pre-wrap;
+word-wrap: break-word;
+min-height: 20px;
+}
 
-    .empty-placeholder {
-      text-align: center;
-      color: #777;
-      font-style: italic;
-      padding: 18px 0;
-    }
+.mrp-input, .qly-input {
+text-align: center;
+width: 100%;
+padding: 0;
+-moz-appearance: textfield;
+appearance: textfield;
+}
+.mrp-input::-webkit-outer-spin-button,
+.mrp-input::-webkit-inner-spin-button,
+.qly-input::-webkit-outer-spin-button,
+.qly-input::-webkit-inner-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
 
-    .footer-grid {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-top: 15px;
-      font-size: 12px;
-    }
-    .bank-title {
-      font-weight: bold;
-      margin-bottom: 4px;
-    }
-    .bank-row {
-      font-weight: bold;
-      margin-bottom: 3px;
-    }
-    .bank-label {
-      display: inline-block;
-      width: 130px;
-    }
+.empty-placeholder {
+text-align: center;
+color: #777;
+font-style: italic;
+padding: 18px 0;
+}
 
-    /* Signature styling */
-    .signature-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-right: 25px;
-    }
-    .sign-image {
-      width: 120px;
-      height: auto;
-      mix-blend-mode: multiply; /* Blends white background seamlessly onto the page */
-      margin-bottom: 4px;
-    }
-    .signature-text {
-      font-weight: bold;
-      font-size: 13px;
-      letter-spacing: 0.5px;
-    }
+.footer-grid {
+display: flex;
+justify-content: space-between;
+align-items: flex-end;
+margin-top: 15px;
+font-size: 12px;
+}
+.bank-title {
+font-weight: bold;
+margin-bottom: 4px;
+}
+.bank-row {
+font-weight: bold;
+margin-bottom: 3px;
+}
+.bank-label {
+display: inline-block;
+width: 130px;
+}
 
-    .terms-box {
-      margin-top: 20px;
-      font-size: 10px;
-      line-height: 1.45;
-    }
-    .terms-box strong {
-      font-size: 10.5px;
-    }
+/* Signature styling */
+.signature-container {
+display: flex;
+flex-direction: column;
+align-items: center;
+padding-right: 25px;
+}
+.sign-image {
+width: 120px;
+height: auto;
+mix-blend-mode: multiply;
+margin-bottom: 4px;
+}
+.signature-text {
+font-weight: bold;
+font-size: 13px;
+letter-spacing: 0.5px;
+}
 
-    @page {
-      size: A4;
-      margin: 0;
-    }
+.terms-box {
+margin-top: 20px;
+font-size: 10px;
+line-height: 1.45;
+}
+.terms-box strong {
+font-size: 10.5px;
+}
 
-    @media print {
-      body {
-        background: #ffffff;
-        padding: 0;
-        margin: 0;
-      }
-      .page-container {
-        box-shadow: none;
-        padding: 15mm 20mm;
-        width: 100%;
-        min-height: auto;
-      }
-      .no-print, .col-action {
-        display: none !important;
-      }
-      input {
-        border: none !important;
-        background: transparent !important;
-      }
-    }
-  </style>
+@page {
+size: A4;
+margin: 0;
+}
+
+@media print {
+body {
+background: #ffffff;
+padding: 0;
+margin: 0;
+}
+.page-container {
+box-shadow: none;
+padding: 15mm 20mm;
+width: 100%;
+min-height: auto;
+}
+.no-print, .col-action {
+display: none !important;
+}
+input, textarea {
+border: none !important;
+background: transparent !important;
+resize: none !important;
+}
+}
+</style>
 </head>
 <body>
 
-  <div class="action-toolbar no-print">
-    <button class="btn btn-add" onclick="addRow()">+ Add Product</button>
-    <button class="btn btn-print" onclick="handlePrint()">Print / Save as PDF</button>
-  </div>
+<div class="action-toolbar no-print">
+<button class="btn btn-add" onclick="addRow()">+ Add Product</button>
+<button class="btn btn-print" onclick="handlePrint()">Print / Save as PDF</button>
+</div>
 
-  <div class="page-container">
-    
-    <table class="header-table">
-      <tr>
-        <td style="width: 80px; vertical-align: top;">
-          <div class="logo-box">
-            <div class="logo-de">DE</div>
-            <div class="logo-sub">Darshan Enterprise</div>
-          </div>
-        </td>
-        <td style="vertical-align: top;">
-          <div class="company-name">DARSHAN ENTERPRISES</div>
-          <div class="address-line">KSHETRAPAL TEMPLE, SADASHIVGAD</div>
-          <div class="address-line">KARWAR (581352)</div>
-        </td>
-      </tr>
-    </table>
+<div class="page-container">
 
-    <div class="meta-row">
-      <div>
-        <span>Gmail: </span><span class="email-link">darshan.raikar325@gmail.com</span>
-      </div>
-      <div class="right-info">
-        PH: 9008233193
-      </div>
-    </div>
-    <div class="meta-row" style="margin-top: 2px;">
-      <div>GSTIN: 29AMJPR9814J1Z9</div>
-      <div class="date-wrapper">
-        <span>DATE:</span>
-        <input type="text" id="quote-date" class="date-input">
-      </div>
-    </div>
+<table class="header-table">
+<tr>
+<td style="width: 80px; vertical-align: top;">
+<div class="logo-box">
+<div class="logo-de">DE</div>
+<div class="logo-sub">Darshan Enterprise</div>
+</div>
+</td>
+<td style="vertical-align: top;">
+<div class="company-name">DARSHAN ENTERPRISES</div>
+<div class="address-line">KSHETRAPAL TEMPLE, SADASHIVGAD</div>
+<div class="address-line">KARWAR (581352)</div>
+</td>
+</tr>
+</table>
 
-    <div class="to-section">
-      To, <input type="text" placeholder="Enter Customer / Client Name or Company" style="width: 90%; font-weight: normal; border-bottom: 1px dashed #ccc;">
-    </div>
+<div class="meta-row">
+<div>
+<span>Gmail: </span><span class="email-link">darshan.raikar325@gmail.com</span>
+</div>
+<div class="right-info">
+PH: 9008233193
+</div>
+</div>
+<div class="meta-row" style="margin-top: 2px;">
+<div>GSTIN: 29AMJPR9814J1Z9</div>
+<div class="date-wrapper">
+<span>DATE:</span>
+<input type="text" id="quote-date" class="date-input">
+</div>
+</div>
 
-    <div class="quote-heading">QUOTATION</div>
+<div class="to-section">
+To, <input type="text" placeholder="Enter Customer / Client Name or Company" style="width: 90%; font-weight: normal; border-bottom: 1px dashed #ccc;">
+</div>
 
-    <table class="quotation-table" id="quote-table">
-      <thead>
-        <tr>
-          <th class="col-sl">SL</th>
-          <th class="col-particular">PARTICOULAR</th>
-          <th class="col-mrp">MRP</th>
-          <th class="col-qly">QLY</th>
-          <th class="col-total">TOTAL</th>
-          <th class="col-cgst">CGST (9%)</th>
-          <th class="col-sgst">SGST (9%)</th>
-          <th class="col-gtotal">G.TOTAL</th>
-          <th class="col-action no-print"></th>
-        </tr>
-      </thead>
-      <tbody id="table-body">
-        <tr id="empty-row" class="no-print">
-          <td colspan="9" class="empty-placeholder">No items added yet. Click "+ Add Product" to add line items.</td>
-        </tr>
-      </tbody>
-    </table>
+<div class="quote-heading">QUOTATION</div>
 
-    <div class="footer-grid">
-      <div>
-        <div class="bank-title">Bank of Baroda</div>
-        <div class="bank-row"><span class="bank-label">ACCOUNT NAME :</span> DARSHAN ENTERPRISES</div>
-        <div class="bank-row"><span class="bank-label">ACCOUNT NO :</span> 64540200001518</div>
-        <div class="bank-row"><span class="bank-label">IFSC CODE :</span> BARB0VJKAWR</div>
-      </div>
-      
-      <!-- Signature with uploaded sign image -->
-      <div class="signature-container">
-        <img class="sign-image" src="https://github.com/company93in-rgb/DE/blob/main/signation.jpeg?raw=true">
-        <span class="signature-text">SIGNATURE</span>
-      </div>
-    </div>
+<table class="quotation-table" id="quote-table">
+<thead>
+<tr>
+<th class="col-sl">SL</th>
+<th class="col-particular">PARTICOULAR</th>
+<th class="col-mrp">MRP</th>
+<th class="col-qly">QLY</th>
+<th class="col-total">TOTAL</th>
+<th class="col-cgst">CGST (9%)</th>
+<th class="col-sgst">SGST (9%)</th>
+<th class="col-gtotal">G.TOTAL</th>
+<th class="col-action no-print"></th>
+</tr>
+</thead>
+<tbody id="table-body">
+<tr id="empty-row" class="no-print">
+<td colspan="9" class="empty-placeholder">No items added yet. Click "+ Add Product" to add line items.</td>
+</tr>
+</tbody>
+</table>
 
-    <div class="terms-box">
-      <strong>Terms & Conditions::</strong><br>
-      <strong>Validity:</strong> This offer is valid for 10 days only.<br>
-      <strong>Delivery:</strong> Ex-Stock, subject to availability, if not in stock, will be delivered in10-15 Days.<br>
-      <strong>Payment:</strong> 50% advance & 50% on delivery & completion of the Job.<br>
-      <strong>Warranty:</strong> We offer warranty of 1 year, commencing from the date of Installation. Any misuse or improper handling of the equipment resulting in damage and Force Majeure conditions like Earthquakes, Floods, Lightening and High Voltage etc. will automatically render this warranty void
-    </div>
+<div class="footer-grid">
+<div>
+<div class="bank-title">Bank of Baroda</div>
+<div class="bank-row"><span class="bank-label">ACCOUNT NAME :</span> DARSHAN ENTERPRISES</div>
+<div class="bank-row"><span class="bank-label">ACCOUNT NO :</span> 64540200001518</div>
+<div class="bank-row"><span class="bank-label">IFSC CODE :</span> BARB0VJKAWR</div>
+</div>
 
-  </div>
+<!-- Signature with embedded image -->
+<div class="signature-container">
+<img class="sign-image" src="https://github.com/company93in-rgb/DE/blob/main/signation.jpeg?raw=true
+">
+<span class="signature-text">SIGNATURE</span>
+</div>
+</div>
 
-  <script>
-    function setInitialDate() {
-      const today = new Date();
-      const dd = String(today.getDate()).padStart(2, '0');
-      const mm = String(today.getMonth() + 1).padStart(2, '0');
-      const yyyy = today.getFullYear();
-      document.getElementById('quote-date').value = `${dd}/${mm}/${yyyy}`;
-    }
+<div class="terms-box">
+<strong>Terms & Conditions::</strong><br>
+<strong>Validity:</strong> This offer is valid for 10 days only.<br>
+<strong>Delivery:</strong> Ex-Stock, subject to availability, if not in stock, will be delivered in10-15 Days.<br>
+<strong>Payment:</strong> 50% advance & 50% on delivery & completion of the Job.<br>
+<strong>Warranty:</strong> We offer warranty of 1 year, commencing from the date of Installation. Any misuse or improper handling of the equipment resulting in damage and Force Majeure conditions like Earthquakes, Floods, Lightening and High Voltage etc. will automatically render this warranty void
+</div>
 
-    function checkEmptyState() {
-      const tbody = document.getElementById('table-body');
-      const itemRows = tbody.querySelectorAll('.item-row');
-      const emptyRow = document.getElementById('empty-row');
-      
-      if (itemRows.length === 0) {
-        if (!emptyRow) {
-          const tr = document.createElement('tr');
-          tr.id = 'empty-row';
-          tr.className = 'no-print';
-          tr.innerHTML = `<td colspan="9" class="empty-placeholder">No items added yet. Click "+ Add Product" to add line items.</td>`;
-          tbody.appendChild(tr);
-        }
-      } else if (emptyRow) {
-        emptyRow.remove();
-      }
-    }
+</div>
 
-    function addRow() {
-      const tbody = document.getElementById('table-body');
-      const emptyRow = document.getElementById('empty-row');
-      if (emptyRow) emptyRow.remove();
+<script>
+function setInitialDate() {
+const today = new Date();
+const dd = String(today.getDate()).padStart(2, '0');
+const mm = String(today.getMonth() + 1).padStart(2, '0');
+const yyyy = today.getFullYear();
+document.getElementById('quote-date').value = ${dd}/${mm}/${yyyy};
+}
 
-      const tr = document.createElement('tr');
-      tr.className = 'item-row';
-      tr.innerHTML = `
-        <td class="col-sl sl-number"></td>
-        <td class="col-particular">
-          <input type="text" class="particular-input" placeholder="Enter product description">
-        </td>
-        <td class="col-mrp">
-          <input type="number" class="mrp-input" placeholder="0.00" step="any" oninput="recalculateRow(this)">
-        </td>
-        <td class="col-qly">
-          <input type="number" class="qly-input" value="1" min="1" step="1" oninput="recalculateRow(this)">
-        </td>
-        <td class="col-total total-val">0.00</td>
-        <td class="col-cgst cgst-val">0.00</td>
-        <td class="col-sgst sgst-val">0.00</td>
-        <td class="col-gtotal gtotal-val">0.00</td>
-        <td class="col-action no-print">
-          <button class="btn-del" onclick="deleteRow(this)">✕</button>
-        </td>
-      `;
-      tbody.appendChild(tr);
-      renumberRows();
-    }
+// Auto-adjusts the height of the textarea to fit all content
+function autoResizeTextarea(textarea) {
+textarea.style.height = 'auto';
+textarea.style.height = textarea.scrollHeight + 'px';
+}
 
-    function deleteRow(btn) {
-      const row = btn.closest('tr');
-      row.remove();
-      renumberRows();
-      checkEmptyState();
-    }
+function checkEmptyState() {
+const tbody = document.getElementById('table-body');
+const itemRows = tbody.querySelectorAll('.item-row');
+const emptyRow = document.getElementById('empty-row');
 
-    function renumberRows() {
-      const rows = document.querySelectorAll('#table-body .item-row');
-      rows.forEach((row, index) => {
-        row.querySelector('.sl-number').textContent = index + 1;
-      });
-    }
+if (itemRows.length === 0) {
+if (!emptyRow) {
+const tr = document.createElement('tr');
+tr.id = 'empty-row';
+tr.className = 'no-print';
+tr.innerHTML = <td colspan="9" class="empty-placeholder"&gt;No items added yet. Click "+ Add Product" to add line items.&lt;/td>;
+tbody.appendChild(tr);
+}
+} else if (emptyRow) {
+emptyRow.remove();
+}
+}
 
-    function recalculateRow(input) {
-      const row = input.closest('tr');
-      const unitMrp = parseFloat(row.querySelector('.mrp-input').value) || 0;
-      const qty = parseFloat(row.querySelector('.qly-input').value) || 0;
+function addRow() {
+const tbody = document.getElementById('table-body');
+const emptyRow = document.getElementById('empty-row');
+if (emptyRow) emptyRow.remove();
 
-      const baseTotal = unitMrp * qty;
-      const cgst = baseTotal * 0.09;
-      const sgst = baseTotal * 0.09;
-      const grandTotal = baseTotal + cgst + sgst;
+const tr = document.createElement('tr');
+tr.className = 'item-row';
+tr.innerHTML = &lt;td class="col-sl sl-number"&gt;&lt;/td&gt; &lt;td class="col-particular"&gt; &lt;textarea class="particular-textarea" rows="1" placeholder="Enter product description" oninput="autoResizeTextarea(this)"&gt;&lt;/textarea&gt; &lt;/td&gt; &lt;td class="col-mrp"&gt; &lt;input type="number" class="mrp-input" placeholder="0.00" step="any" oninput="recalculateRow(this)"&gt; &lt;/td&gt; &lt;td class="col-qly"&gt; &lt;input type="number" class="qly-input" value="1" min="1" step="1" oninput="recalculateRow(this)"&gt; &lt;/td&gt; &lt;td class="col-total total-val"&gt;0.00&lt;/td&gt; &lt;td class="col-cgst cgst-val"&gt;0.00&lt;/td&gt; &lt;td class="col-sgst sgst-val"&gt;0.00&lt;/td&gt; &lt;td class="col-gtotal gtotal-val"&gt;0.00&lt;/td&gt; &lt;td class="col-action no-print"&gt; &lt;button class="btn-del" onclick="deleteRow(this)"&gt;✕&lt;/button&gt; &lt;/td&gt;;
+tbody.appendChild(tr);
+renumberRows();
+}
 
-      row.querySelector('.total-val').textContent = baseTotal.toFixed(2);
-      row.querySelector('.cgst-val').textContent = cgst.toFixed(2);
-      row.querySelector('.sgst-val').textContent = sgst.toFixed(2);
-      row.querySelector('.gtotal-val').textContent = grandTotal.toFixed(2);
-    }
+function deleteRow(btn) {
+const row = btn.closest('tr');
+row.remove();
+renumberRows();
+checkEmptyState();
+}
 
-    function handlePrint() {
-      const rows = document.querySelectorAll('#table-body .item-row');
-      
-      if (rows.length === 0) {
-        alert("Error: Need to add product before printing or saving PDF!");
-        return;
-      }
+function renumberRows() {
+const rows = document.querySelectorAll('#table-body .item-row');
+rows.forEach((row, index) => {
+row.querySelector('.sl-number').textContent = index + 1;
+});
+}
 
-      let hasValidItem = false;
-      rows.forEach(row => {
-        const itemDesc = row.querySelector('.particular-input').value.trim();
-        const mrp = parseFloat(row.querySelector('.mrp-input').value) || 0;
-        if (itemDesc !== "" || mrp > 0) {
-          hasValidItem = true;
-        }
-      });
+function recalculateRow(input) {
+const row = input.closest('tr');
+const unitMrp = parseFloat(row.querySelector('.mrp-input').value) || 0;
+const qty = parseFloat(row.querySelector('.qly-input').value) || 0;
 
-      if (!hasValidItem) {
-        alert("Error: Need to add product details (product name or price) before printing!");
-        return;
-      }
+const baseTotal = unitMrp * qty;
+const cgst = baseTotal * 0.09;
+const sgst = baseTotal * 0.09;
+const grandTotal = baseTotal + cgst + sgst;
 
-      window.print();
-    }
+row.querySelector('.total-val').textContent = baseTotal.toFixed(2);
+row.querySelector('.cgst-val').textContent = cgst.toFixed(2);
+row.querySelector('.sgst-val').textContent = sgst.toFixed(2);
+row.querySelector('.gtotal-val').textContent = grandTotal.toFixed(2);
+}
 
-    document.addEventListener("DOMContentLoaded", () => {
-      setInitialDate();
-    });
-  </script>
+function handlePrint() {
+const rows = document.querySelectorAll('#table-body .item-row');
+
+if (rows.length === 0) {
+alert("Error: Need to add product before printing or saving PDF!");
+return;
+}
+
+let hasValidItem = false;
+rows.forEach(row => {
+const itemDesc = row.querySelector('.particular-textarea').value.trim();
+const mrp = parseFloat(row.querySelector('.mrp-input').value) || 0;
+if (itemDesc !== "" || mrp > 0) {
+hasValidItem = true;
+}
+});
+
+if (!hasValidItem) {
+alert("Error: Need to add product details (product name or price) before printing!");
+return;
+}
+
+// Ensure textareas are properly resized before printing
+document.querySelectorAll('.particular-textarea').forEach(autoResizeTextarea);
+
+window.print();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+setInitialDate();
+});
+</script>
 </body>
 </html>
+
